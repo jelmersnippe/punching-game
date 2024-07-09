@@ -8,6 +8,7 @@ signal just_landed()
 @export var MAX_CHARGE = 600
 @export var AIR_TIME = 0.2
 @export var AIR_HOLD_GRACE_TIME = 0.2
+@export var PUSH_FORCE = 100
 
 var CHARGE_SPEED = MAX_CHARGE / TIME_TO_MAX_CHARGE
 
@@ -116,3 +117,7 @@ func _on_punch_area_area_entered(area):
 	if area.is_in_group("target"):
 		area.queue_free()
 		available_charges += 1
+	else:
+		if remaining_air_time > 0:
+			print("yes")
+			area.get_parent().apply_central_impulse(velocity)

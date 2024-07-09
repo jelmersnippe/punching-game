@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdrngn6eu31ii"]
+
+[ext_resource type="Texture2D" uid="uid://etc7cw3txllm" path="res://box.png" id="1_m8yt8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jl1k0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wdpfr"]
+
+[node name="Punchable" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_jl1k0")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_wdpfr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_m8yt8")

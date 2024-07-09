@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://brqk2ou1f2rle"]
+[gd_scene load_steps=7 format=3 uid="uid://brqk2ou1f2rle"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_18lnb"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="1_hjuks"]
 [ext_resource type="PackedScene" uid="uid://dfwr5yu5es00s" path="res://target.tscn" id="2_n3bh1"]
 [ext_resource type="PackedScene" uid="uid://xfxsbmeqx7m0" path="res://floor.tscn" id="2_rnkv0"]
+[ext_resource type="PackedScene" uid="uid://cdrngn6eu31ii" path="res://punchable.tscn" id="5_c0eku"]
+[ext_resource type="PackedScene" uid="uid://dr72oscm7l8km" path="res://gravityless_punchable.tscn" id="6_3eqqx"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_18lnb")
@@ -65,5 +67,25 @@ scale = Vector2(20, 1)
 [node name="Floor11" parent="." instance=ExtResource("2_rnkv0")]
 position = Vector2(166, 447)
 scale = Vector2(5, 1)
+
+[node name="Floor12" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(728, 662)
+scale = Vector2(5, 1)
+
+[node name="Floor13" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(823, 661)
+scale = Vector2(5, 1)
+
+[node name="Punchable" parent="." instance=ExtResource("5_c0eku")]
+position = Vector2(494, 647)
+
+[node name="Punchable2" parent="." instance=ExtResource("5_c0eku")]
+position = Vector2(495, 676)
+
+[node name="GravitylessPunchable" parent="." instance=ExtResource("6_3eqqx")]
+position = Vector2(918, 505)
+
+[node name="GravitylessPunchable2" parent="." instance=ExtResource("6_3eqqx")]
+position = Vector2(636, 648)
 
 [connection signal="just_landed" from="Player" to="." method="_on_player_just_landed"]

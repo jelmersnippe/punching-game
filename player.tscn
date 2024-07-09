@@ -11,12 +11,14 @@ size = Vector2(8, 16)
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(107, 218)
+collision_mask = 2
 script = ExtResource("1_4gvax")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_m560u")
 
 [node name="PunchArea" type="Area2D" parent="."]
+collision_mask = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PunchArea"]
 shape = SubResource("RectangleShape2D_osncu")

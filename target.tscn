@@ -6,6 +6,8 @@
 radius = 8.0
 
 [node name="Target" type="Area2D" groups=["target"]]
+collision_layer = 4
+collision_mask = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="." groups=["target"]]
 texture = ExtResource("1_kfmqp")
