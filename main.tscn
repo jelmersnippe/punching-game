@@ -1,42 +1,69 @@
 [gd_scene load_steps=5 format=3 uid="uid://brqk2ou1f2rle"]
 
+[ext_resource type="Script" path="res://main.gd" id="1_18lnb"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="1_hjuks"]
 [ext_resource type="PackedScene" uid="uid://dfwr5yu5es00s" path="res://target.tscn" id="2_n3bh1"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_px6w6"]
-size = Vector2(16, 16)
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ojv6y"]
-size = Vector2(16, 16)
+[ext_resource type="PackedScene" uid="uid://xfxsbmeqx7m0" path="res://floor.tscn" id="2_rnkv0"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_18lnb")
 
 [node name="Player" parent="." instance=ExtResource("1_hjuks")]
+position = Vector2(417, 669)
 
-[node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2(126, 299)
+[node name="Floor" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(684, 0)
+
+[node name="Floor2" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(6, 386)
+rotation = 1.5708
+scale = Vector2(60, 1)
+
+[node name="Floor3" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(1286, 351)
+rotation = 1.5708
+scale = Vector2(60, 1)
+
+[node name="Floor4" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(697, 717)
+
+[node name="Floor5" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(1128, 525)
 scale = Vector2(20, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-shape = SubResource("RectangleShape2D_px6w6")
-
-[node name="Sprite2D" type="Sprite2D" parent="Floor"]
-texture = SubResource("PlaceholderTexture2D_ojv6y")
-
 [node name="Target" parent="." instance=ExtResource("2_n3bh1")]
-position = Vector2(173, 234)
+position = Vector2(859, 576)
 
 [node name="Target2" parent="." instance=ExtResource("2_n3bh1")]
-position = Vector2(63, 217)
+position = Vector2(859, 576)
+
+[node name="Floor6" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(172, 610)
+scale = Vector2(20, 1)
 
 [node name="Target3" parent="." instance=ExtResource("2_n3bh1")]
-position = Vector2(120, 140)
+position = Vector2(208, 357)
 
-[node name="Target4" parent="." instance=ExtResource("2_n3bh1")]
-position = Vector2(177, 65)
+[node name="Floor7" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(213, 473)
+rotation = 1.5708
+scale = Vector2(10, 1)
 
-[node name="Target5" parent="." instance=ExtResource("2_n3bh1")]
-position = Vector2(26, 83)
+[node name="Floor8" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(428, 535)
+scale = Vector2(20, 1)
 
-[node name="Target6" parent="." instance=ExtResource("2_n3bh1")]
-position = Vector2(93, 13)
+[node name="Floor9" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(274, 273)
+rotation = 1.5708
+scale = Vector2(20, 1)
+
+[node name="Floor10" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(-17, 521)
+scale = Vector2(20, 1)
+
+[node name="Floor11" parent="." instance=ExtResource("2_rnkv0")]
+position = Vector2(166, 447)
+scale = Vector2(5, 1)
+
+[connection signal="just_landed" from="Player" to="." method="_on_player_just_landed"]

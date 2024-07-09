@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://xfxsbmeqx7m0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_px6w6"]
+size = Vector2(16, 16)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ojv6y"]
+size = Vector2(16, 16)
+
+[node name="Floor" type="StaticBody2D"]
+position = Vector2(635, 710)
+scale = Vector2(100, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_px6w6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_ojv6y")

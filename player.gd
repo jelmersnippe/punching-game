@@ -1,11 +1,14 @@
 extends CharacterBody2D
 
-const SPEED = 300.0
+signal just_landed()
 
-const TIME_TO_MAX_CHARGE = 1.5
-const MAX_CHARGE = 600
-const AIR_TIME = 0.2
-const AIR_HOLD_GRACE_TIME = 0.2
+@export var SPEED = 300.0
+@export var CHARGE_SLOWDOWN = 0.3
+@export var TIME_TO_MAX_CHARGE = 1
+@export var MAX_CHARGE = 600
+@export var AIR_TIME = 0.2
+@export var AIR_HOLD_GRACE_TIME = 0.2
+
 var CHARGE_SPEED = MAX_CHARGE / TIME_TO_MAX_CHARGE
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -17,16 +20,22 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @export var available_charges = 0
 
+var is_grounded = false
+
 func _draw():
 	var distance = current_charge * AIR_TIME
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	draw_line(Vector2(0, 0), distance * direction, Color.REBECCA_PURPLE, 2)
 
 func _physics_process(delta):
-	if not is_on_floor():
-		_handle_airborne(delta)
-	else:
+	if is_on_floor():
+		if not is_grounded:
+			just_landed.emit()
 		_handle_grounded(delta)
+	else:
+		_handle_airborne(delta)
+		
+	is_grounded = is_on_floor()
 
 	move_and_slide()
 	
@@ -41,7 +50,7 @@ func _handle_airborne(delta: float):
 		if remaining_air_time <= 0:
 			velocity /= 4
 			
-	if Input.is_action_just_pressed("charge"):
+	if Input.is_action_just_pressed("charge") and available_charges > 0:
 		remaining_air_hold_grace_time = AIR_HOLD_GRACE_TIME
 			
 	if Input.is_action_pressed("charge"):
@@ -71,6 +80,7 @@ func _handle_grounded(delta: float):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		
 	if Input.is_action_pressed("charge"):
+		velocity.x *= CHARGE_SLOWDOWN
 		_charge(delta)
 		
 	if Input.is_action_just_released("charge"):
