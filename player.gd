@@ -10,10 +10,10 @@ var CHARGE_SPEED = MAX_CHARGE / TIME_TO_MAX_CHARGE
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-var current_charge: float = 0
-var remaining_air_time: float = 0
+@export var current_charge: float = 0
+@export var remaining_air_time: float = 0
 
-var available_charges = 2
+@export var available_charges = 0
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -49,3 +49,9 @@ func _physics_process(delta):
 		velocity = direction * MAX_CHARGE
 
 	move_and_slide()
+
+
+func _on_punch_area_area_entered(area):
+	if area.is_in_group("target"):
+		area.queue_free()
+		available_charges += 1

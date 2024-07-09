@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://diye237awnyll"]
+[gd_scene load_steps=5 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
 [ext_resource type="Texture2D" uid="uid://tw48vx7gms2j" path="res://character.png" id="1_m560u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_osncu"]
+size = Vector2(12, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e7ngg"]
 size = Vector2(8, 16)
@@ -13,5 +16,12 @@ script = ExtResource("1_4gvax")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_m560u")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="PunchArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PunchArea"]
+shape = SubResource("RectangleShape2D_osncu")
+
+[node name="MovementCollisionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_e7ngg")
+
+[connection signal="area_entered" from="PunchArea" to="." method="_on_punch_area_area_entered"]
