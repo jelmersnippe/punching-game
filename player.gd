@@ -16,17 +16,41 @@ var CHARGE_SPEED = MAX_CHARGE / TIME_TO_MAX_CHARGE
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @export var current_charge: float = 0
-@export var remaining_air_time: float = 0
+@export var remaining_air_time: float = 0:
+	set(value):
+		remaining_air_time = value
+		if remaining_air_time <= 0:
+			$Sprite2D/Hand.position = Vector2(-3, 3)
+			$Sprite2D/Hand2.position = Vector2(3, 3)
 @export var remaining_air_hold_grace_time: float = 0
 
 @export var available_charges = 0
 
 var is_grounded = false
 
+func _set_release_hands():
+	if velocity.x > 0:
+		$Sprite2D/Hand.position = Vector2(8, 3)
+		$Sprite2D/Hand2.position = Vector2(3, 3)
+	else:
+		$Sprite2D/Hand.position = Vector2(-3, 3)
+		$Sprite2D/Hand2.position = Vector2(-8, 3)
+
+func _set_charging_hands():
+	var direction = (get_global_mouse_position() - global_position).normalized()
+	if direction.x > 0:
+		$Sprite2D/Hand.position = Vector2(-8, 3)
+		$Sprite2D/Hand2.position = Vector2(3, 3)
+	else:
+		$Sprite2D/Hand.position = Vector2(-3, 3)
+		$Sprite2D/Hand2.position = Vector2(8, 3)
+		
 func _draw():
 	var distance = current_charge * AIR_TIME
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	draw_line(Vector2(0, 0), distance * direction, Color.REBECCA_PURPLE, 2)
+	
+	$Sprite2D.flip_h = direction.x < 0
 
 func _physics_process(delta):
 	if is_on_floor():
@@ -80,6 +104,11 @@ func _handle_grounded(delta: float):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		
+	if input == 1:
+		$Sprite2D.flip_h = false
+	elif input == -1:
+		$Sprite2D.flip_h = true
+		
 	if Input.is_action_pressed("charge"):
 		velocity.x *= CHARGE_SLOWDOWN
 		_charge(delta)
@@ -91,6 +120,8 @@ func _charge(delta: float) -> bool:
 	if available_charges <= 0:
 		return false
 		
+	_set_charging_hands()
+	
 	if current_charge >= MAX_CHARGE:
 		current_charge = MAX_CHARGE
 		queue_redraw()
@@ -111,6 +142,7 @@ func _release_charge():
 	
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	velocity = direction * MAX_CHARGE
+	_set_release_hands()
 	queue_redraw()
 		
 func _on_punch_area_area_entered(area):
@@ -119,5 +151,4 @@ func _on_punch_area_area_entered(area):
 		available_charges += 1
 	else:
 		if remaining_air_time > 0:
-			print("yes")
 			area.get_parent().apply_central_impulse(velocity)

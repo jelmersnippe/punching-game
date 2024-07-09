@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://brqk2ou1f2rle"]
+[gd_scene load_steps=8 format=3 uid="uid://brqk2ou1f2rle"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_18lnb"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="1_hjuks"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://xfxsbmeqx7m0" path="res://floor.tscn" id="2_rnkv0"]
 [ext_resource type="PackedScene" uid="uid://cdrngn6eu31ii" path="res://punchable.tscn" id="5_c0eku"]
 [ext_resource type="PackedScene" uid="uid://dr72oscm7l8km" path="res://gravityless_punchable.tscn" id="6_3eqqx"]
+[ext_resource type="Script" path="res://player_camera.gd" id="7_g45si"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_18lnb")
@@ -32,9 +33,6 @@ position = Vector2(697, 717)
 [node name="Floor5" parent="." instance=ExtResource("2_rnkv0")]
 position = Vector2(1128, 525)
 scale = Vector2(20, 1)
-
-[node name="Target" parent="." instance=ExtResource("2_n3bh1")]
-position = Vector2(859, 576)
 
 [node name="Target2" parent="." instance=ExtResource("2_n3bh1")]
 position = Vector2(859, 576)
@@ -87,5 +85,10 @@ position = Vector2(918, 505)
 
 [node name="GravitylessPunchable2" parent="." instance=ExtResource("6_3eqqx")]
 position = Vector2(636, 648)
+
+[node name="PlayerCamera2D" type="Camera2D" parent="." node_paths=PackedStringArray("player")]
+zoom = Vector2(2, 2)
+script = ExtResource("7_g45si")
+player = NodePath("../Player")
 
 [connection signal="just_landed" from="Player" to="." method="_on_player_just_landed"]
