@@ -24,4 +24,7 @@ shape = SubResource("RectangleShape2D_osncu")
 [node name="MovementCollisionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_e7ngg")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_e7ngg")
+
 [connection signal="area_entered" from="PunchArea" to="." method="_on_punch_area_area_entered"]
