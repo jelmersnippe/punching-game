@@ -11,50 +11,41 @@ var CHARGE_SPEED = MAX_CHARGE / TIME_TO_MAX_CHARGE
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var current_charge: float = 0
-var gravity_avoid_time: float = 0
+var remaining_air_time: float = 0
 
-var charge_time = 0
+var available_charges = 2
 
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
-		if gravity_avoid_time <= 0:
+		if remaining_air_time <= 0:
 			velocity.y += gravity * delta
 		else:
-			gravity_avoid_time -= delta
-			if gravity_avoid_time <= 0:
+			remaining_air_time -= delta
+			if remaining_air_time <= 0:
 				velocity.x = 0
 				velocity.y = 0
 	else: 
-		gravity_avoid_time = 0
+		remaining_air_time = 0
+		if available_charges <= 0:
+			available_charges = 1
 
 	# Handle jump.
-	if Input.is_action_pressed("charge") and is_on_floor() and current_charge < MAX_CHARGE:
+	if Input.is_action_pressed("charge") and available_charges > 0 and current_charge < MAX_CHARGE:
+		velocity.y = 0
 		current_charge += CHARGE_SPEED * delta
 		if current_charge > MAX_CHARGE:
 			current_charge = MAX_CHARGE
-		else:
-			charge_time += delta
 		
-	if not is_on_floor():
-		move_and_slide()
-		return
+	if is_on_floor():
+		velocity.x = Input.get_axis("move_left", "move_right") * SPEED
 		
 	if Input.is_action_just_released("charge") and current_charge > 0:
-		velocity.y = -current_charge
-		gravity_avoid_time = (current_charge / MAX_CHARGE) * AIR_TIME
+		remaining_air_time = (current_charge / MAX_CHARGE) * AIR_TIME
 		current_charge = 0
-		charge_time = 0
+		available_charges -= 1
 		
 		var direction = (get_global_mouse_position() - global_position).normalized()
 		velocity = direction * MAX_CHARGE
-	else :
-		# Get the input direction and handle the movement/deceleration.
-		# As good practice, you should replace UI actions with custom gameplay actions.
-		var direction = Input.get_axis("move_left", "move_right")
-		if direction:
-			velocity.x = direction * SPEED
-		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
