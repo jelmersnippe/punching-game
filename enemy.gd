@@ -39,10 +39,15 @@ func _process(delta):
 		$Sprite2D.flip_h = true
 	
 	if knocked:
+		$RayCast2D.target_position = velocity * delta * 2
+		
+		if $RayCast2D.is_colliding():
+			velocity = velocity.bounce($RayCast2D.get_collision_normal())
+		
 		knocked_grace_time -= delta
-		velocity.x = move_toward(velocity.x, 0, knockback_recovery_speed)
-		velocity.y = move_toward(velocity.y, 0, knockback_recovery_speed)
-		if velocity == Vector2.ZERO:
+		velocity -= velocity.normalized() * knockback_recovery_speed
+		
+		if abs(velocity) < Vector2(0.5, 0.5):
 			knocked = false
 		
 	move_and_slide()
