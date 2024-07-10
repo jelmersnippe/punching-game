@@ -154,7 +154,10 @@ func _on_punch_area_area_entered(area: Area2D):
 			area.get_parent().queue_free()
 		elif area is Enemy:
 			var enemy = area as Enemy
-			enemy.knockback(position.direction_to(enemy.position), (remaining_air_time / AIR_TIME) * MAX_CHARGE)
+			var impact_force = (remaining_air_time / AIR_TIME) * MAX_CHARGE
+			print("impact force: " + str(impact_force))
+			enemy.knockback(position.direction_to(enemy.position), impact_force)
+			enemy.take_damage(impact_force / 120)
 			velocity /= 4
 		else:
 			area.get_parent().apply_central_impulse(velocity)

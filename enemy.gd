@@ -5,6 +5,15 @@ class_name Enemy
 @export var knockback_recovery_speed = 5
 @export var direction = Vector2.RIGHT
 
+@export var base_health = 10:
+	set(value):
+		base_health = value
+		$Healthbar.max_value = value
+var current_health:
+	set(value):
+		current_health = value
+		$Healthbar.value = current_health
+
 var default_wall_raycast: Vector2
 var default_floor_raycast: Vector2
 
@@ -22,6 +31,7 @@ var knocked_grace_time = 0.1
 var remaining_knocked_grace_time = 0
 
 func _ready():
+	current_health = base_health
 	default_wall_raycast = $WallRaycast.target_position
 	default_floor_raycast = $FloorRaycast.target_position
 	
@@ -36,18 +46,19 @@ func _process(delta):
 		velocity.x = move_toward(velocity.x, 0, knockback_recovery_speed)
 		if velocity.x == 0:
 			knocked = false
-			_set_raycasts_to_direction()
 	
 	# apply gravity
 	if not is_grounded():
 		velocity.y += 9.8
 		
+	if not knocked:
+		velocity.x = direction.x * speed
+		
+	_set_raycasts_to_direction()
+	
 	# turn on wall collision or no floor in front while in control on the ground
 	if $WallRaycast.is_colliding() or (not knocked and is_grounded() and not $FloorRaycast.is_colliding()):
 		_turn(-velocity)
-		
-	if not knocked:
-		velocity.x = direction.x * speed
 	
 	position += velocity * delta
 	
@@ -79,6 +90,12 @@ func knockback(normalized_impact_direction: Vector2, force: float):
 	velocity = normalized_impact_direction * force
 	_set_raycasts_to_direction()
 
+func take_damage(damage: int):
+	current_health = clamp(current_health - damage, 0, base_health)
+	
+	if current_health <= 0:
+		queue_free()
+
 func _on_area_entered(area):
 	if not knocked:
 		return
@@ -88,5 +105,6 @@ func _on_area_entered(area):
 		if enemy.remaining_knocked_grace_time > 0:
 			return
 		enemy.knockback(velocity.normalized(), (velocity.x + velocity.y) / 2)
+		enemy.take_damage((velocity.x + velocity.y) / 120)
 		enemy._turn(velocity.normalized())
 		velocity /= 3
