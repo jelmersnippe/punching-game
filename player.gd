@@ -155,7 +155,6 @@ func _on_punch_area_area_entered(area: Area2D):
 		elif area is Enemy:
 			var enemy = area as Enemy
 			var impact_force = (remaining_air_time / AIR_TIME) * MAX_CHARGE
-			print("impact force: " + str(impact_force))
 			enemy.knockback(position.direction_to(enemy.position), impact_force)
 			enemy.take_damage(impact_force / 120)
 			velocity /= 4
