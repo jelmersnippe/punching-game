@@ -61,7 +61,12 @@ func _physics_process(delta):
 		_handle_airborne(delta)
 		
 	is_grounded = is_on_floor()
-
+	
+	if remaining_air_time > 0:
+		remaining_air_time -= delta
+		if remaining_air_time <= 0:
+			velocity /= 4
+			
 	move_and_slide()
 	
 func _handle_airborne(delta: float):
@@ -70,10 +75,6 @@ func _handle_airborne(delta: float):
 		
 	if remaining_air_time <= 0:
 		velocity.y += gravity * delta
-	else:
-		remaining_air_time -= delta
-		if remaining_air_time <= 0:
-			velocity /= 4
 			
 	if Input.is_action_just_pressed("charge") and available_charges > 0:
 		remaining_air_hold_grace_time = AIR_HOLD_GRACE_TIME
@@ -91,7 +92,7 @@ func _handle_airborne(delta: float):
 		remaining_air_hold_grace_time = 0
 		
 func _handle_grounded(delta: float):
-	if not is_on_floor():
+	if not is_on_floor() or remaining_air_time > 0:
 		return
 		
 	remaining_air_time = 0
