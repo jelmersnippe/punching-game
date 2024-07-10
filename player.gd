@@ -9,7 +9,7 @@ signal just_landed()
 @export var AIR_TIME = 0.2
 @export var AIR_HOLD_GRACE_TIME = 0.2
 
-var CHARGE_SPEED = MAX_CHARGE / TIME_TO_MAX_CHARGE
+var CHARGE_SPEED: int = MAX_CHARGE / TIME_TO_MAX_CHARGE
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -155,5 +155,6 @@ func _on_punch_area_area_entered(area: Area2D):
 		elif area is Enemy:
 			var enemy = area as Enemy
 			enemy.knockback(position.direction_to(enemy.position), (remaining_air_time / AIR_TIME) * MAX_CHARGE)
+			velocity /= 4
 		else:
 			area.get_parent().apply_central_impulse(velocity)

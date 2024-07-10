@@ -9,17 +9,30 @@ var default_wall_raycast: Vector2
 var default_floor_raycast: Vector2
 
 var velocity = Vector2.ZERO
-var knocked = false
+var knocked = false:
+	set(value):
+		knocked = value
+		if knocked:
+			remaining_knocked_grace_time = knocked_grace_time
+		else: 
+			remaining_knocked_grace_time = 0
+
+var knocked_grace_time = 0.1
+
+var remaining_knocked_grace_time = 0
 
 func _ready():
 	default_wall_raycast = $WallRaycast.target_position
 	default_floor_raycast = $FloorRaycast.target_position
+	
+	$Sprite2D.flip_h = direction.x < 0
 
 func is_grounded() -> bool:
 	return $GroundedRaycast.is_colliding()
 
 func _process(delta):
 	if knocked:
+		knocked_grace_time -= delta
 		velocity.x = move_toward(velocity.x, 0, knockback_recovery_speed)
 		if velocity.x == 0:
 			knocked = false
@@ -58,11 +71,22 @@ func _set_raycasts_to_direction():
 		$WallRaycast.target_position.x = -default_wall_raycast.x
 		$FloorRaycast.target_position.x = -default_floor_raycast.x
 	
-func knockback(direction: Vector2, force: float):
+func knockback(normalized_impact_direction: Vector2, force: float):
 	if knocked: 
 		return
 		
 	knocked = true
-	velocity = (direction - Vector2(0, 0.3)) * force
+	velocity = normalized_impact_direction * force
 	_set_raycasts_to_direction()
-	
+
+func _on_area_entered(area):
+	if not knocked:
+		return
+		
+	if area is Enemy:
+		var enemy = area as Enemy
+		if enemy.remaining_knocked_grace_time > 0:
+			return
+		enemy.knockback(velocity.normalized(), (velocity.x + velocity.y) / 2)
+		enemy._turn(velocity.normalized())
+		velocity /= 3
