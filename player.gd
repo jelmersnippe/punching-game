@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-signal just_landed()
-
 @export var SPEED = 300.0
 @export var CHARGE_SLOWDOWN = 0.3
 @export var TIME_TO_MAX_CHARGE = 1
@@ -17,8 +15,6 @@ var CHARGE_SPEED: int = MAX_CHARGE / TIME_TO_MAX_CHARGE
 		if remaining_punch_time <= 0:
 			$Sprite2D/Hand.position = Vector2(-3, 3)
 			$Sprite2D/Hand2.position = Vector2(3, 3)
-
-@export var available_charges = 0
 
 func _set_release_hands():
 	if velocity.x > 0:
@@ -58,10 +54,6 @@ func _handle_grounded(delta: float):
 	if remaining_punch_time > 0:
 		return
 		
-	remaining_punch_time = 0
-	available_charges = 1
-		
-		
 	var input = Vector2(Input.get_axis("move_left", "move_right"), Input.get_axis("move_up", "move_down")).normalized()
 	velocity = input * SPEED
 		
@@ -77,29 +69,19 @@ func _handle_grounded(delta: float):
 	if Input.is_action_just_released("charge"):
 		_release_charge()
 		
-func _charge(delta: float) -> bool:
-	if available_charges <= 0:
-		return false
-		
+func _charge(delta: float):
 	_set_charging_hands()
 	
-	if current_charge >= MAX_CHARGE:
-		current_charge = MAX_CHARGE
-		queue_redraw()
-		return false
-		
 	current_charge = min(current_charge + CHARGE_SPEED * delta, MAX_CHARGE)
 		
 	queue_redraw()
-	return true
 	
 func _release_charge():
-	if current_charge <= 0 or available_charges <= 0:
+	if current_charge <= 0 :
 		return
 		
 	remaining_punch_time = (current_charge / MAX_CHARGE) * PUNCH_TIME
 	current_charge = 0
-	available_charges -= 1
 	
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	velocity = direction * MAX_CHARGE

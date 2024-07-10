@@ -1,13 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://brqk2ou1f2rle"]
+[gd_scene load_steps=5 format=3 uid="uid://brqk2ou1f2rle"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_18lnb"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="1_hjuks"]
 [ext_resource type="TileSet" uid="uid://b6n5fjkbmrfjh" path="res://arena.tres" id="2_3naeh"]
 [ext_resource type="PackedScene" uid="uid://c444r884rkxd1" path="res://enemy.tscn" id="3_c3rri"]
 [ext_resource type="PackedScene" uid="uid://dpukfjaytn7gw" path="res://player_camera.tscn" id="5_2414d"]
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_18lnb")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("2_3naeh")
