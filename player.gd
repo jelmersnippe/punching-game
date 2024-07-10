@@ -148,8 +148,10 @@ func _release_charge():
 		
 func _on_punch_area_area_entered(area):
 	if area.is_in_group("target"):
-		area.queue_free()
 		available_charges += 1
-	else:
-		if remaining_air_time > 0:
+		area.queue_free()
+	elif remaining_air_time > 0:
+		if area.is_in_group("breakable"):
+			area.get_parent().queue_free()
+		else:
 			area.get_parent().apply_central_impulse(velocity)

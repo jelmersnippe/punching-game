@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://brqk2ou1f2rle"]
+[gd_scene load_steps=9 format=3 uid="uid://brqk2ou1f2rle"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_18lnb"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="1_hjuks"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cdrngn6eu31ii" path="res://punchable.tscn" id="5_c0eku"]
 [ext_resource type="PackedScene" uid="uid://dr72oscm7l8km" path="res://gravityless_punchable.tscn" id="6_3eqqx"]
 [ext_resource type="Script" path="res://player_camera.gd" id="7_g45si"]
+[ext_resource type="PackedScene" uid="uid://brl67u1s3ttv6" path="res://breakable.tscn" id="8_weibn"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_18lnb")
@@ -90,5 +91,12 @@ position = Vector2(636, 648)
 zoom = Vector2(2, 2)
 script = ExtResource("7_g45si")
 player = NodePath("../Player")
+
+[node name="Breakable" parent="." instance=ExtResource("8_weibn")]
+position = Vector2(276, 480)
+scale = Vector2(2, 3)
+
+[node name="Breakable2" parent="." instance=ExtResource("8_weibn")]
+position = Vector2(450, 685)
 
 [connection signal="just_landed" from="Player" to="." method="_on_player_just_landed"]

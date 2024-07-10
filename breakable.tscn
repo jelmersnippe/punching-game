@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://brl67u1s3ttv6"]
+
+[ext_resource type="Texture2D" uid="uid://cwdedd8lbd8kw" path="res://breakable-wall.png" id="1_2pxo0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qc2r6"]
+size = Vector2(8, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7xked"]
+size = Vector2(8, 32)
+
+[node name="Breakable" type="RigidBody2D" groups=["breakable"]]
+collision_layer = 2
+collision_mask = 0
+gravity_scale = 0.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["breakable"]]
+texture = ExtResource("1_2pxo0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["breakable"]]
+shape = SubResource("RectangleShape2D_qc2r6")
+
+[node name="Area2D" type="Area2D" parent="." groups=["breakable"]]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" groups=["breakable"]]
+shape = SubResource("RectangleShape2D_7xked")
