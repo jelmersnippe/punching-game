@@ -40,7 +40,7 @@ position = Vector2(495, 105)
 position = Vector2(495, 105)
 
 [node name="Enemy8" parent="." instance=ExtResource("3_c3rri")]
-position = Vector2(495, 105)
+position = Vector2(680, 240)
 
 [node name="Enemy9" parent="." instance=ExtResource("3_c3rri")]
-position = Vector2(495, 105)
+position = Vector2(709, 225)
