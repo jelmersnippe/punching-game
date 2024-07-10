@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://brl67u1s3ttv6"]
+[gd_scene load_steps=4 format=3 uid="uid://y274fwvasyq8"]
 
-[ext_resource type="Texture2D" uid="uid://cwdedd8lbd8kw" path="res://breakable-wall.png" id="1_2pxo0"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_7ajm0"]
+load_path = "res://.godot/imported/breakable-wall.png-f9672323d154adfebaa4df80d85f00d2.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qc2r6"]
 size = Vector2(8, 32)
@@ -14,7 +15,7 @@ collision_mask = 0
 gravity_scale = 0.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." groups=["breakable"]]
-texture = ExtResource("1_2pxo0")
+texture = SubResource("CompressedTexture2D_7ajm0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["breakable"]]
 shape = SubResource("RectangleShape2D_qc2r6")

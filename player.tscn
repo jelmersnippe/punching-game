@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
-[ext_resource type="Texture2D" uid="uid://ddxjii7eftm6r" path="res://player.png" id="2_oh4xo"]
-[ext_resource type="Texture2D" uid="uid://66d8y5pmbanh" path="res://hand.png" id="3_tq51k"]
+[ext_resource type="Texture2D" uid="uid://ddxjii7eftm6r" path="res://sprites/player.png" id="2_6283g"]
+[ext_resource type="Texture2D" uid="uid://66d8y5pmbanh" path="res://sprites/hand.png" id="3_no5v2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_osncu"]
 size = Vector2(13, 20)
@@ -13,18 +13,19 @@ size = Vector2(7, 16)
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(107, 218)
 collision_mask = 2
+motion_mode = 1
 script = ExtResource("1_4gvax")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_oh4xo")
+texture = ExtResource("2_6283g")
 
 [node name="Hand" type="Sprite2D" parent="Sprite2D"]
 position = Vector2(-3, 3)
-texture = ExtResource("3_tq51k")
+texture = ExtResource("3_no5v2")
 
 [node name="Hand2" type="Sprite2D" parent="Sprite2D"]
 position = Vector2(3, 3)
-texture = ExtResource("3_tq51k")
+texture = ExtResource("3_no5v2")
 
 [node name="PunchArea" type="Area2D" parent="."]
 collision_mask = 12

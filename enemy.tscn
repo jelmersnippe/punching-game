@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c444r884rkxd1"]
+[gd_scene load_steps=7 format=3 uid="uid://c444r884rkxd1"]
 
-[ext_resource type="Texture2D" uid="uid://cwlij5qwegpty" path="res://enemy.png" id="1_4sdt8"]
 [ext_resource type="Script" path="res://enemy.gd" id="1_bfs01"]
+[ext_resource type="Texture2D" uid="uid://cwlij5qwegpty" path="res://sprites/enemy.png" id="2_w57ym"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(9, 14)
@@ -12,9 +12,13 @@ bg_color = Color(1, 0.339232, 0.310417, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3qf0"]
 bg_color = Color(0.218966, 0.709132, 0.33525, 1)
 
-[node name="Enemy" type="Area2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hk3ai"]
+size = Vector2(12, 18)
+
+[node name="Enemy" type="CharacterBody2D"]
 collision_layer = 8
-collision_mask = 10
+collision_mask = 2
+motion_mode = 1
 script = ExtResource("1_bfs01")
 
 [node name="MovementCollisionShape" type="CollisionShape2D" parent="."]
@@ -22,20 +26,7 @@ position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_dim6m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_4sdt8")
-
-[node name="WallRaycast" type="RayCast2D" parent="."]
-target_position = Vector2(7, 0)
-collision_mask = 2
-hit_from_inside = true
-
-[node name="FloorRaycast" type="RayCast2D" parent="."]
-target_position = Vector2(7, 9)
-collision_mask = 2
-
-[node name="GroundedRaycast" type="RayCast2D" parent="."]
-target_position = Vector2(0, 8)
-collision_mask = 2
+texture = ExtResource("2_w57ym")
 
 [node name="Healthbar" type="ProgressBar" parent="."]
 offset_left = -11.0
@@ -49,4 +40,12 @@ step = 1.0
 value = 7.0
 show_percentage = false
 
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_hk3ai")
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]

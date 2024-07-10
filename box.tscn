@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cj66ybj40h7im"]
-
-[ext_resource type="Texture2D" uid="uid://etc7cw3txllm" path="res://box.png" id="1_7qh0y"]
+[gd_scene load_steps=3 format=3 uid="uid://b5ndj2uk2jl05"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5cipo"]
 size = Vector2(48, 48)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s7sqn"]
+load_path = "res://.godot/imported/box.png-196cb2b6d7422a4ab3b9c60b5a994fe3.ctex"
 
 [node name="Box" type="RigidBody2D"]
 collision_layer = 4
@@ -15,4 +16,4 @@ shape = SubResource("RectangleShape2D_5cipo")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(3, 3)
-texture = ExtResource("1_7qh0y")
+texture = SubResource("CompressedTexture2D_s7sqn")
