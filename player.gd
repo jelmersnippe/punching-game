@@ -8,7 +8,6 @@ signal just_landed()
 @export var MAX_CHARGE = 600
 @export var AIR_TIME = 0.2
 @export var AIR_HOLD_GRACE_TIME = 0.2
-@export var PUSH_FORCE = 100
 
 var CHARGE_SPEED = MAX_CHARGE / TIME_TO_MAX_CHARGE
 
@@ -155,6 +154,6 @@ func _on_punch_area_area_entered(area: Area2D):
 			area.get_parent().queue_free()
 		elif area is Enemy:
 			var enemy = area as Enemy
-			enemy.knockback(position.direction_to(enemy.position), 400)
+			enemy.knockback(position.direction_to(enemy.position), (remaining_air_time / AIR_TIME) * MAX_CHARGE)
 		else:
 			area.get_parent().apply_central_impulse(velocity)

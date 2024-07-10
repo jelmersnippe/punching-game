@@ -63,6 +63,6 @@ func knockback(direction: Vector2, force: float):
 		return
 		
 	knocked = true
-	velocity = (direction * force) - Vector2(0, 100)
+	velocity = (direction - Vector2(0, 0.3)) * force
 	_set_raycasts_to_direction()
 	
