@@ -1,13 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c444r884rkxd1"]
+[gd_scene load_steps=4 format=3 uid="uid://c444r884rkxd1"]
 
 [ext_resource type="Texture2D" uid="uid://cwlij5qwegpty" path="res://enemy.png" id="1_4sdt8"]
 [ext_resource type="Script" path="res://enemy.gd" id="1_bfs01"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(9, 14)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ms2u2"]
-size = Vector2(13, 18)
 
 [node name="Enemy" type="Area2D"]
 collision_layer = 8
@@ -17,13 +14,6 @@ script = ExtResource("1_bfs01")
 [node name="MovementCollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_dim6m")
-
-[node name="Hitbox" type="Area2D" parent="."]
-collision_layer = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(0.5, 1)
-shape = SubResource("RectangleShape2D_ms2u2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_4sdt8")

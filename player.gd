@@ -146,12 +146,15 @@ func _release_charge():
 	_set_release_hands()
 	queue_redraw()
 		
-func _on_punch_area_area_entered(area):
+func _on_punch_area_area_entered(area: Area2D):
 	if area.is_in_group("target"):
 		available_charges += 1
 		area.queue_free()
 	elif remaining_air_time > 0:
 		if area.is_in_group("breakable"):
 			area.get_parent().queue_free()
+		elif area is Enemy:
+			var enemy = area as Enemy
+			enemy.knockback(position.direction_to(enemy.position), 400)
 		else:
 			area.get_parent().apply_central_impulse(velocity)
