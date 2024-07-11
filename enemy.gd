@@ -16,16 +16,14 @@ var current_health:
 		current_health = value
 		$Healthbar.value = current_health
 
-var knocked = false
-
 var knocked_grace_time = 0.1
-
 var remaining_knocked_grace_time = 0
 
 var current_state: State = State.WANDERING
 enum State {
 	WANDERING,
-	FOLLOWING
+	FOLLOWING,
+	KNOCKED
 }
 
 var target: Node2D = null
@@ -42,37 +40,36 @@ func _ready():
 func _process(delta):
 	if velocity.x > 0:
 		$Sprite2D.flip_h = false
-		
 	elif velocity.x < 0:
 		$Sprite2D.flip_h = true
 	
-	if knocked:
-		$RayCast2D.target_position = velocity * delta * 2
-		
-		if $RayCast2D.is_colliding():
-			velocity = velocity.bounce($RayCast2D.get_collision_normal())
-			velocity /= 3
-		
-		remaining_knocked_grace_time -= delta
-		var prev_velocity = velocity
-		velocity -= velocity.normalized() * knockback_recovery_speed
-		
-		if sign(prev_velocity) != sign(velocity):
-			knocked = false
-			wander_target = position
-			velocity = Vector2.ZERO
-	else:
-		match current_state:
-			State.WANDERING:
-				_wander_behavior(delta)
-			State.FOLLOWING:
-				_follow_behavior()
+	match current_state:
+		State.KNOCKED:
+			_knocked_behavior(delta)
+		State.WANDERING:
+			_wander_behavior(delta)
+		State.FOLLOWING:
+			_follow_behavior()
 			
 	move_and_slide()
 	
 func _draw():
 	draw_line(Vector2(0, 0), $RayCast2D.target_position, Color.RED, 2)
 
+func _knocked_behavior(delta):
+	$RayCast2D.target_position = velocity * delta * 2
+	
+	if $RayCast2D.is_colliding():
+		velocity = velocity.bounce($RayCast2D.get_collision_normal())
+		velocity /= 3
+	
+	remaining_knocked_grace_time -= delta
+	velocity -= velocity.normalized() * knockback_recovery_speed
+	
+	if velocity.distance_to(Vector2.ZERO) < 2:
+		wander_target = position
+		current_state = State.WANDERING
+	
 var wander_target: Vector2
 func _wander_behavior(delta):
 	if target != null:
@@ -103,11 +100,11 @@ func _follow_behavior():
 	velocity = direction * speed
 	
 func knockback(normalized_impact_direction: Vector2, force: float):
-	if knocked: 
+	if current_state == State.KNOCKED: 
 		return
 		
 	remaining_knocked_grace_time = knocked_grace_time
-	knocked = true
+	current_state = State.KNOCKED
 	velocity = normalized_impact_direction * force
 	print(get_name() + " knocked with velocity " + str(velocity))
 
@@ -118,7 +115,7 @@ func take_damage(damage: int):
 		queue_free()
 
 func _on_hitbox_area_entered(area):
-	if not knocked:
+	if current_state != State.KNOCKED:
 		return
 		
 	var parent = area.get_parent()
