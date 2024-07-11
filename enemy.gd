@@ -64,24 +64,34 @@ func _process(delta):
 	else:
 		match current_state:
 			State.WANDERING:
-				_wander_behavior()
+				_wander_behavior(delta)
 			State.FOLLOWING:
 				_follow_behavior()
 			
 	move_and_slide()
 	
+func _draw():
+	draw_line(Vector2(0, 0), $RayCast2D.target_position, Color.RED, 2)
+
 var wander_target: Vector2
-func _wander_behavior():
+func _wander_behavior(delta):
 	if target != null:
 		current_state = State.FOLLOWING
 		return
 		
 	if position.distance_to(wander_target) < 2:
-		print(get_name() + " picking new wander target")
+		print(get_name() + " picking new wander target because reached destination")
 		wander_target = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
 		
 	var direction = (wander_target - position).normalized()
+		
 	velocity = direction * speed
+	
+	$RayCast2D.target_position = velocity * delta * 10
+	queue_redraw()
+	if $RayCast2D.is_colliding():
+		print(get_name() + " picking new wander target because wall in front")
+		wander_target = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
 	
 	
 func _follow_behavior():
@@ -125,7 +135,6 @@ func _on_hitbox_area_entered(area):
 		velocity /= 4
 		print(get_name() + " slowed to " + str(velocity))
 			
-
 
 func _on_detection_range_body_entered(body):
 	if not body is Player:
