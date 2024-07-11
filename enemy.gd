@@ -3,7 +3,9 @@ class_name Enemy
 
 @export var speed = 50
 @export var knockback_recovery_speed = 5
-@export var velocity_deadzone = 2
+
+@export var wander_range: Vector2 = Vector2(200, 200)
+@export var detection_range: float = 100
 
 @export var base_health = 10:
 	set(value):
@@ -20,8 +22,22 @@ var knocked_grace_time = 0.1
 
 var remaining_knocked_grace_time = 0
 
+var current_state: State = State.WANDERING
+enum State {
+	WANDERING,
+	FOLLOWING
+}
+
+var target: Node2D = null
+
 func _ready():
+	current_state = State.WANDERING
+	wander_target = position
 	current_health = base_health
+	
+	var detection_shape = CircleShape2D.new()
+	detection_shape.radius = detection_range
+	$DetectionRange/CollisionShape2D.shape = detection_shape
 
 func _process(delta):
 	if velocity.x > 0:
@@ -43,9 +59,38 @@ func _process(delta):
 		
 		if sign(prev_velocity) != sign(velocity):
 			knocked = false
+			wander_target = position
 			velocity = Vector2.ZERO
-		
+	else:
+		match current_state:
+			State.WANDERING:
+				_wander_behavior()
+			State.FOLLOWING:
+				_follow_behavior()
+			
 	move_and_slide()
+	
+var wander_target: Vector2
+func _wander_behavior():
+	if target != null:
+		current_state = State.FOLLOWING
+		return
+		
+	if position.distance_to(wander_target) < 2:
+		print(get_name() + " picking new wander target")
+		wander_target = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
+		
+	var direction = (wander_target - position).normalized()
+	velocity = direction * speed
+	
+	
+func _follow_behavior():
+	if target == null:
+		current_state = State.WANDERING
+		return
+	
+	var direction = (target.position - position).normalized()
+	velocity = direction * speed
 	
 func knockback(normalized_impact_direction: Vector2, force: float):
 	if knocked: 
@@ -80,3 +125,22 @@ func _on_hitbox_area_entered(area):
 		velocity /= 4
 		print(get_name() + " slowed to " + str(velocity))
 			
+
+
+func _on_detection_range_body_entered(body):
+	if not body is Player:
+		return
+		
+	print(get_name() + " acquired target " + body.get_name())
+	target = body
+	current_state = State.FOLLOWING
+
+
+func _on_detection_range_body_exited(body):
+	if body != target:
+		return
+		
+	print(get_name() + " lost target " + body.get_name())
+	target = null
+	wander_target = position
+	current_state = State.WANDERING
