@@ -118,7 +118,7 @@ func knockback(normalized_impact_direction: Vector2, force: float):
 	velocity = normalized_impact_direction * force
 	print(get_name() + " knocked with velocity " + str(velocity))
 
-func take_damage(damage: int):
+func take_damage(damage: int, hit_direction: Vector2):
 	current_health = clamp(current_health - damage, 0, base_health)
 	
 	if current_health <= 0:
@@ -128,6 +128,9 @@ func take_damage(damage: int):
 	$Sprite.frame = 1
 	var hit_flash_timer = get_tree().create_timer(0.1)
 	hit_flash_timer.timeout.connect(_reset_color)
+	
+	$HitParticles.direction = hit_direction
+	$HitParticles.emitting = true
 		
 func _reset_color():
 	shader_material.set_shader_parameter("active", false)
@@ -149,7 +152,7 @@ func _on_hitbox_area_entered(area):
 		var damage = floor(clamp(force / 50, 1, 3))
 		print(get_name() + " knocked " + enemy.get_name() + " dealing " + str(damage) + " damage")
 		enemy.knockback(velocity.normalized(), force / 3)
-		enemy.take_damage(damage)
+		enemy.take_damage(damage, area.position.direction_to(position).normalized())
 		velocity /= 4
 		print(get_name() + " slowed to " + str(velocity))
 			

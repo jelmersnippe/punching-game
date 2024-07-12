@@ -97,8 +97,9 @@ func _on_punch_area_area_entered(area: Area2D):
 		elif parent is Enemy:
 			var enemy = parent as Enemy
 			var impact_force = (remaining_punch_time / PUNCH_TIME) * MAX_CHARGE
-			enemy.knockback(position.direction_to(enemy.position), impact_force)
-			enemy.take_damage(impact_force / 120)
+			var direction = position.direction_to(enemy.position)
+			enemy.knockback(direction.normalized(), impact_force)
+			enemy.take_damage(impact_force / 120, direction.normalized())
 			velocity /= 4
 		else:
 			parent.apply_central_impulse(velocity)
