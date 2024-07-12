@@ -28,6 +28,8 @@ enum State {
 
 var target: Node2D = null
 
+@onready var shader_material = $Sprite.material as ShaderMaterial
+
 func _ready():
 	current_state = State.WANDERING
 	wander_target = position
@@ -39,9 +41,9 @@ func _ready():
 
 func _process(delta):
 	if velocity.x > 0:
-		$Sprite2D.flip_h = false
+		$Sprite.flip_h = false
 	elif velocity.x < 0:
-		$Sprite2D.flip_h = true
+		$Sprite.flip_h = true
 	
 	match current_state:
 		State.KNOCKED:
@@ -57,6 +59,9 @@ func _draw():
 	draw_line(Vector2(0, 0), $RayCast2D.target_position, Color.RED, 2)
 
 func _knocked_behavior(delta):
+	if current_state != State.KNOCKED:
+		return
+		
 	$RayCast2D.target_position = velocity * delta * 2
 	
 	if $RayCast2D.is_colliding():
@@ -67,17 +72,20 @@ func _knocked_behavior(delta):
 	velocity -= velocity.normalized() * knockback_recovery_speed
 	
 	if velocity.distance_to(Vector2.ZERO) < 2:
+		_reset_sprite()
 		wander_target = position
 		current_state = State.WANDERING
 	
 var wander_target: Vector2
 func _wander_behavior(delta):
+	if current_state != State.WANDERING:
+		return
+		
 	if target != null:
 		current_state = State.FOLLOWING
 		return
 		
 	if position.distance_to(wander_target) < 2:
-		print(get_name() + " picking new wander target because reached destination")
 		wander_target = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
 		
 	var direction = (wander_target - position).normalized()
@@ -87,11 +95,13 @@ func _wander_behavior(delta):
 	$RayCast2D.target_position = velocity * delta * 10
 	queue_redraw()
 	if $RayCast2D.is_colliding():
-		print(get_name() + " picking new wander target because wall in front")
 		wander_target = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
 	
 	
 func _follow_behavior():
+	if current_state != State.FOLLOWING:
+		return
+		
 	if target == null:
 		current_state = State.WANDERING
 		return
@@ -113,7 +123,18 @@ func take_damage(damage: int):
 	
 	if current_health <= 0:
 		queue_free()
-
+		
+	shader_material.set_shader_parameter("active", true)
+	$Sprite.frame = 1
+	var hit_flash_timer = get_tree().create_timer(0.1)
+	hit_flash_timer.timeout.connect(_reset_color)
+		
+func _reset_color():
+	shader_material.set_shader_parameter("active", false)
+	
+func _reset_sprite():
+	$Sprite.frame = 0
+	
 func _on_hitbox_area_entered(area):
 	if current_state != State.KNOCKED:
 		return
@@ -134,19 +155,23 @@ func _on_hitbox_area_entered(area):
 			
 
 func _on_detection_range_body_entered(body):
+	if current_state != State.WANDERING:
+		return
+		
 	if not body is Player:
 		return
 		
-	print(get_name() + " acquired target " + body.get_name())
 	target = body
 	current_state = State.FOLLOWING
 
 
 func _on_detection_range_body_exited(body):
+	if current_state != State.FOLLOWING:
+		return
+		
 	if body != target:
 		return
 		
-	print(get_name() + " lost target " + body.get_name())
 	target = null
 	wander_target = position
 	current_state = State.WANDERING

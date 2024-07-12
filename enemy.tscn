@@ -1,10 +1,31 @@
-[gd_scene load_steps=8 format=3 uid="uid://c444r884rkxd1"]
+[gd_scene load_steps=12 format=3 uid="uid://c444r884rkxd1"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_bfs01"]
+[ext_resource type="Shader" path="res://hit_flash.gdshader" id="2_0fgyv"]
 [ext_resource type="Texture2D" uid="uid://cwlij5qwegpty" path="res://sprites/enemy.png" id="2_w57ym"]
+[ext_resource type="Texture2D" uid="uid://7mkrlcjkgxkk" path="res://sprites/enemy_hit.png" id="4_l4i50"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(9, 14)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h34eh"]
+resource_local_to_scene = true
+shader = ExtResource("2_0fgyv")
+shader_parameter/active = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hthlf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_w57ym")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_l4i50")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdo6m"]
 bg_color = Color(1, 0.339232, 0.310417, 1)
@@ -27,8 +48,10 @@ script = ExtResource("1_bfs01")
 position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_dim6m")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_w57ym")
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_h34eh")
+sprite_frames = SubResource("SpriteFrames_hthlf")
+speed_scale = 0.0
 
 [node name="Healthbar" type="ProgressBar" parent="."]
 offset_left = -11.0
