@@ -121,9 +121,6 @@ func knockback(normalized_impact_direction: Vector2, force: float):
 func take_damage(damage: int, hit_direction: Vector2):
 	current_health = clamp(current_health - damage, 0, base_health)
 	
-	if current_health <= 0:
-		queue_free()
-		
 	shader_material.set_shader_parameter("active", true)
 	$Sprite.frame = 1
 	var hit_flash_timer = get_tree().create_timer(0.1)
@@ -131,6 +128,11 @@ func take_damage(damage: int, hit_direction: Vector2):
 	
 	$HitParticles.direction = hit_direction
 	$HitParticles.emitting = true
+	
+	if current_health <= 0:
+		$DeathParticles.emitting = true
+		var death_timer = get_tree().create_timer($DeathParticles.lifetime)
+		death_timer.timeout.connect(queue_free)
 		
 func _reset_color():
 	shader_material.set_shader_parameter("active", false)
