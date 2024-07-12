@@ -65,6 +65,7 @@ func _knocked_behavior(delta):
 	$RayCast2D.target_position = velocity * delta * 2
 	
 	if $RayCast2D.is_colliding():
+		take_damage(1, Vector2.ZERO - velocity.normalized())
 		velocity = velocity.bounce($RayCast2D.get_collision_normal())
 		velocity /= 3
 	

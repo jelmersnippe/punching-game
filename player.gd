@@ -48,6 +48,7 @@ func _physics_process(delta):
 		remaining_punch_time -= delta
 		if remaining_punch_time <= 0:
 			velocity /= 4
+			$TrailingParticles.emitting = false
 			
 	move_and_slide()
 		
@@ -87,19 +88,19 @@ func _release_charge():
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	velocity = direction * MAX_CHARGE
 	_set_release_hands()
+	$TrailingParticles.emitting = true
 	queue_redraw()
+	
+	for area in $PunchArea.get_overlapping_areas():
+		_on_punch_area_area_entered(area)
 		
 func _on_punch_area_area_entered(area: Area2D):
 	if remaining_punch_time > 0:
 		var parent = area.get_parent()
-		if area.is_in_group("breakable"):
-			parent.queue_free()
-		elif parent is Enemy:
+		if parent is Enemy:
 			var enemy = parent as Enemy
 			var impact_force = (remaining_punch_time / PUNCH_TIME) * MAX_CHARGE
 			var direction = position.direction_to(enemy.position)
 			enemy.knockback(direction.normalized(), impact_force)
 			enemy.take_damage(impact_force / 120, direction.normalized())
 			velocity /= 4
-		else:
-			parent.apply_central_impulse(velocity)
