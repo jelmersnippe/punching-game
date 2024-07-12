@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Enemy
 
+@export var hit_sound: AudioStream
+
 @export var speed = 50
 @export var knockback_recovery_speed = 5
 
@@ -122,6 +124,7 @@ func knockback(normalized_impact_direction: Vector2, force: float):
 func take_damage(damage: int, hit_direction: Vector2):
 	current_health = clamp(current_health - damage, 0, base_health)
 	
+	SoundManager.play_sound(hit_sound, 0)
 	shader_material.set_shader_parameter("active", true)
 	$Sprite.frame = 1
 	var hit_flash_timer = get_tree().create_timer(0.1)

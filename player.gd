@@ -1,6 +1,10 @@
 extends CharacterBody2D
 class_name Player
 
+@export var punch_sound: AudioStream
+@export var charge_sound: AudioStream
+var charge_sound_player: AudioStreamPlayer2D
+
 @export var SPEED = 300.0
 @export var CHARGE_SLOWDOWN = 0.3
 @export var TIME_TO_MAX_CHARGE = 1
@@ -64,6 +68,9 @@ func _handle_grounded(delta: float):
 	elif input.x < 0:
 		$Sprite2D.flip_h = true
 		
+	if Input.is_action_just_pressed("charge"):
+		charge_sound_player = SoundManager.play_sound(charge_sound, -20)
+		
 	if Input.is_action_pressed("charge"):
 		velocity *= CHARGE_SLOWDOWN
 		_charge(delta)
@@ -82,9 +89,13 @@ func _release_charge():
 	if current_charge <= 0 :
 		return
 		
+	if charge_sound_player != null:
+		charge_sound_player.stop()
+		
 	remaining_punch_time = (current_charge / MAX_CHARGE) * PUNCH_TIME
 	current_charge = 0
 	
+	SoundManager.play_sound(punch_sound, -10)
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	velocity = direction * MAX_CHARGE
 	_set_release_hands()

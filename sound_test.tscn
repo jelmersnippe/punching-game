@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://crsj4nd3oe3ey"]
+
+[ext_resource type="AudioStream" uid="uid://c5pwpfy6yosoc" path="res://sounds/charging-machine-90403.mp3" id="1_6exi6"]
+[ext_resource type="Script" path="res://sound_manager.gd" id="1_qgxnl"]
+
+[node name="SoundTest" type="AudioStreamPlayer2D"]
+stream = ExtResource("1_6exi6")
+volume_db = -50.0
+script = ExtResource("1_qgxnl")

@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://diye237awnyll"]
+[gd_scene load_steps=9 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
 [ext_resource type="Texture2D" uid="uid://ddxjii7eftm6r" path="res://sprites/player.png" id="2_6283g"]
+[ext_resource type="AudioStream" uid="uid://b06ogbyftj1hs" path="res://sounds/punch.wav" id="2_ucn14"]
 [ext_resource type="Texture2D" uid="uid://66d8y5pmbanh" path="res://sprites/hand.png" id="3_no5v2"]
+[ext_resource type="AudioStream" uid="uid://c5pwpfy6yosoc" path="res://sounds/charging-machine-90403.mp3" id="3_sqgcf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_osncu"]
 size = Vector2(13, 20)
@@ -19,6 +21,8 @@ position = Vector2(107, 218)
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_4gvax")
+punch_sound = ExtResource("2_ucn14")
+charge_sound = ExtResource("3_sqgcf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_6283g")
