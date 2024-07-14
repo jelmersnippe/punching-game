@@ -15,7 +15,7 @@ shader_parameter/active = false
 size = Vector2(13, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e7ngg"]
-size = Vector2(7, 16)
+size = Vector2(5, 14)
 
 [sub_resource type="Curve" id="Curve_cafhw"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.461783), 0.0, 0.0, 0, 0]
@@ -49,6 +49,7 @@ motion_mode = 1
 script = ExtResource("1_4gvax")
 punch_sound = ExtResource("2_ucn14")
 charge_sound = ExtResource("3_sqgcf")
+SPEED = 170.0
 
 [node name="Sprite" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_iilkl")

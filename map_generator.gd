@@ -1,5 +1,8 @@
 extends Node2D
 
+signal map_generated(center: Vector2i, tiles: Array[Vector2i])
+
+@export var tilemap: TileMap
 @export var steps: int = 20
 @export var initial_walkers: int = 4
 @export var chance_to_turn: float = 0.8
@@ -13,21 +16,28 @@ var walker_chance_to_spawn: Array[float] = []
 var directions = [Vector2i.DOWN, Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT]
 
 func _ready():
-	var tiles = generate_map(get_viewport_rect().get_center() / $TileMap.rendering_quadrant_size)
+	var tiles = generate_map(get_viewport_rect().get_center())
 	create_tilemap(tiles)
 	
 func create_tilemap(tiles: Array[Vector2i]):
-	for tile in $TileMap.get_used_cells(0):
-		$TileMap.set_cell(0, tile, -1)
-		
+	for tile in tilemap.get_used_cells(0):
+		tilemap.set_cell(0, tile, -1)
+	
+	var x_values = tiles.map(func(x): return x.x)	
+	var y_values = tiles.map(func(x): return x.y)
+	for x in range(x_values.min() - 1, x_values.max() + 2):
+		for y in range(y_values.min() - 1, y_values.max() + 2):
+			tilemap.set_cell(0, Vector2i(x, y), 0, Vector2i(0, 0))
+			
 	for tile in tiles:
-		$TileMap.set_cell(0, tile, 0, Vector2i(0, 0))
+		tilemap.set_cell(0, tile, 0, Vector2i(1, 0))
 	
 func generate_map(center: Vector2i) -> Array[Vector2i]:
-	var map_tiles = [center]
+	var center_tile = center / tilemap.rendering_quadrant_size
+	var map_tiles = [center_tile]
 	
 	for i in initial_walkers:
-		_spawn_walker(center, chance_to_spawn_walker)
+		_spawn_walker(center_tile, chance_to_spawn_walker)
 		
 	while len(walker_positions) > 0:
 		var indexes_to_clear = []
@@ -62,6 +72,7 @@ func generate_map(center: Vector2i) -> Array[Vector2i]:
 		if not unique.has(item):
 			unique.append(item)
 
+	map_generated.emit(center, unique)
 	return unique
 	
 func _spawn_walker(initial_position: Vector2i, spawn_chance: float):
@@ -76,5 +87,5 @@ func _get_random_direction() -> Vector2i:
 
 
 func _on_generate_pressed():
-	var tiles = generate_map(get_viewport_rect().get_center() / $TileMap.rendering_quadrant_size)
+	var tiles = generate_map(get_viewport_rect().get_center())
 	create_tilemap(tiles)

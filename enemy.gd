@@ -59,9 +59,6 @@ func _process(delta):
 			_follow_behavior()
 			
 	move_and_slide()
-	
-func _draw():
-	draw_line(Vector2(0, 0), $RayCast2D.target_position, Color.RED, 2)
 
 func _knocked_behavior(delta):
 	if current_state != State.KNOCKED:
@@ -99,7 +96,6 @@ func _wander_behavior(delta):
 	velocity = direction * speed
 	
 	$RayCast2D.target_position = velocity * delta * 10
-	queue_redraw()
 	if $RayCast2D.is_colliding():
 		wander_target = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
 	

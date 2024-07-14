@@ -18,5 +18,10 @@ func _disabled_screenflash():
 	var shader_material = $ScreenFlash.material as ShaderMaterial
 	shader_material.set_shader_parameter("intensity", 0)
 
-func screen_flash_on_damage(damage: int):
+func screen_flash_on_damage(_damage: int):
 	screen_flash(0.8, 0.1)
+
+
+func _on_main_player_spawned(player: Player):
+	player.damage_received.connect(screen_flash_on_damage)
+	player.health_changed.connect(set_health)

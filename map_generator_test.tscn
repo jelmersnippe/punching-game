@@ -3,8 +3,9 @@
 [ext_resource type="Script" path="res://map_generator.gd" id="1_7cl4s"]
 [ext_resource type="TileSet" uid="uid://b6n5fjkbmrfjh" path="res://arena.tres" id="2_ctww3"]
 
-[node name="MapGeneratorTest" type="Node2D"]
+[node name="MapGeneratorTest" type="Node2D" node_paths=PackedStringArray("tilemap")]
 script = ExtResource("1_7cl4s")
+tilemap = NodePath("TileMap")
 steps = 50
 initial_walkers = 8
 chance_to_turn = 1.0
