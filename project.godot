@@ -69,7 +69,7 @@ move_down={
 
 [navigation]
 
-2d/default_edge_connection_margin=12.0
+2d/default_edge_connection_margin=24.0
 
 [rendering]
 

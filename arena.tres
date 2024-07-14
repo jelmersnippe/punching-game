@@ -2,10 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://hqjef2tjf1xl" path="res://tiles.png" id="1_fssv8"]
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_5hs0t"]
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_72m0c"]
 vertices = PackedVector2Array(2, 2, -2, 2, -2, -2, 2, -2)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-1.5, -1.5, 2, -1.5, 2, 1.5, -1.5, 1.5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)])
 source_geometry_group_name = &"navigation_polygon_source_group"
 agent_radius = 0.0
 
@@ -19,7 +19,7 @@ texture = ExtResource("1_fssv8")
 1:0/0 = 0
 1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:0/0/physics_layer_0/angular_velocity = 0.0
-1:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_5hs0t")
+1:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_72m0c")
 
 [resource]
 physics_layer_0/collision_layer = 2

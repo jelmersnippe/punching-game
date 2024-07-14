@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://7mkrlcjkgxkk" path="res://sprites/enemy_hit.png" id="4_l4i50"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
-size = Vector2(9, 14)
+size = Vector2(4, 10)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h34eh"]
 resource_local_to_scene = true
@@ -70,7 +70,7 @@ hit_sound = ExtResource("2_8myha")
 detection_range = 250.0
 
 [node name="MovementCollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, 1)
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_dim6m")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
