@@ -1,11 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://diye237awnyll"]
+[gd_scene load_steps=23 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
 [ext_resource type="AudioStream" uid="uid://b06ogbyftj1hs" path="res://sounds/punch.wav" id="2_ucn14"]
-[ext_resource type="Texture2D" uid="uid://66d8y5pmbanh" path="res://sprites/hand.png" id="3_no5v2"]
 [ext_resource type="AudioStream" uid="uid://c5pwpfy6yosoc" path="res://sounds/charging-machine-90403.mp3" id="3_sqgcf"]
 [ext_resource type="Shader" path="res://hit_flash.gdshader" id="4_76iuq"]
 [ext_resource type="Texture2D" uid="uid://cxogbwb7e75n4" path="res://sprites/AnimationSheet.png" id="4_butkp"]
+[ext_resource type="PackedScene" uid="uid://b6e30jedyyd58" path="res://cue.tscn" id="7_ivu1l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u8e1s"]
 shader = ExtResource("4_76iuq")
@@ -78,9 +78,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_osncu"]
-size = Vector2(13, 20)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e7ngg"]
 size = Vector2(5, 14)
 
@@ -124,21 +121,7 @@ position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_x86ke")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.610889
-
-[node name="Hand" type="Sprite2D" parent="Sprite"]
-position = Vector2(-3, 6)
-texture = ExtResource("3_no5v2")
-
-[node name="Hand2" type="Sprite2D" parent="Sprite"]
-position = Vector2(3, 6)
-texture = ExtResource("3_no5v2")
-
-[node name="PunchArea" type="Area2D" parent="."]
-collision_mask = 12
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PunchArea"]
-shape = SubResource("RectangleShape2D_osncu")
+frame_progress = 0.616457
 
 [node name="MovementCollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1)
@@ -203,5 +186,13 @@ collision_mask = 8
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_x74aa")
 
-[connection signal="area_entered" from="PunchArea" to="." method="_on_punch_area_area_entered"]
+[node name="RotationPoint" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(0, 3)
+
+[node name="Cue" parent="RotationPoint" instance=ExtResource("7_ivu1l")]
+position = Vector2(5, 0)
+collision_mask = 8
+
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
+[connection signal="area_entered" from="RotationPoint/Cue" to="." method="_on_punch_area_area_entered"]

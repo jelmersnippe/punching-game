@@ -23,6 +23,7 @@ initial_walkers = 6
 chance_to_spawn_walker = 0.4
 
 [node name="TileMap" type="TileMap" parent="."]
+z_index = -10
 tile_set = ExtResource("2_3naeh")
 format = 2
 

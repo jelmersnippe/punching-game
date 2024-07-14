@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6e30jedyyd58"]
+
+[ext_resource type="Texture2D" uid="uid://b337kfwbwphru" path="res://sprites/cue.png" id="1_1dghm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c62of"]
+size = Vector2(24, 4)
+
+[node name="Cue" type="Area2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_1dghm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_c62of")

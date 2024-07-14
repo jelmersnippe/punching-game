@@ -20,8 +20,7 @@ var CHARGE_SPEED: int = MAX_CHARGE / TIME_TO_MAX_CHARGE
 @export var charge_cooldown = 1
 var remaining_charge_cooldown = 0
 
-var default_hand_position_left: Vector2
-var default_hand_position_right: Vector2
+var default_cue_position: Vector2
 
 @export var current_charge: float = 0
 @export var remaining_punch_time: float = 0:
@@ -31,35 +30,31 @@ var default_hand_position_right: Vector2
 			_reset_hands()
 
 func _reset_hands():
-	$Sprite/Hand.position = default_hand_position_left
-	$Sprite/Hand2.position = default_hand_position_right
+	$RotationPoint/Cue.position = default_cue_position
 
 func _set_release_hands():
-	if velocity.x > 0:
-		$Sprite/Hand.position = default_hand_position_left + Vector2(5, 0)
-		$Sprite/Hand2.position = default_hand_position_right
-	else:
-		$Sprite/Hand.position = default_hand_position_left
-		$Sprite/Hand2.position = default_hand_position_right - Vector2(5, 0)
+	$RotationPoint/Cue.position = default_cue_position + Vector2(5,0)
 
 func _set_charging_hands():
-	var direction = (get_global_mouse_position() - global_position).normalized()
-	if direction.x > 0:
-		$Sprite/Hand.position = default_hand_position_left - Vector2(5, 0)
-		$Sprite/Hand2.position = default_hand_position_right
-	else:
-		$Sprite/Hand.position = default_hand_position_left
-		$Sprite/Hand2.position = default_hand_position_right + Vector2(5, 0)
+	$RotationPoint/Cue.position = default_cue_position - Vector2(5,0)
 		
 func _draw():
 	var distance = current_charge * PUNCH_TIME
-	var direction = (get_global_mouse_position() - global_position).normalized()
-	draw_line(Vector2(0, 0), distance * direction, Color.REBECCA_PURPLE, 2)
+	var direction = $RotationPoint/Cue.global_position.direction_to(get_global_mouse_position())
+	var cue_position = Vector2.ZERO + $RotationPoint.position + $RotationPoint/Cue.position
+	draw_line(cue_position, cue_position + distance * direction, Color.REBECCA_PURPLE, 2)
 
 func _physics_process(delta):
 	if knocked:
 		move_and_slide()
 		return
+		
+	$RotationPoint.look_at(get_global_mouse_position())
+	var cue_rotation = fmod(fmod($RotationPoint.rotation_degrees, 360) + 360, 360)
+	if cue_rotation > 180 and cue_rotation < 360:
+		$RotationPoint.z_index = -1
+	else:
+		$RotationPoint.z_index = 1
 	
 	_handle_grounded(delta)
 	
@@ -129,7 +124,7 @@ func _release_charge():
 	$TrailingParticles.emitting = true
 	queue_redraw()
 	
-	for area in $PunchArea.get_overlapping_areas():
+	for area in $RotationPoint/Cue.get_overlapping_areas():
 		_on_punch_area_area_entered(area)
 		
 func _on_punch_area_area_entered(area: Area2D):
@@ -154,8 +149,7 @@ var current_health: int:
 
 func _ready():
 	current_health = starting_health
-	default_hand_position_left = $Sprite/Hand.position
-	default_hand_position_right = $Sprite/Hand2.position
+	default_cue_position = $RotationPoint/Cue.position
 	
 func _cancel_charge():
 	remaining_charge_cooldown = charge_cooldown

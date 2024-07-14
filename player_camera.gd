@@ -18,7 +18,6 @@ func _physics_process(delta):
 	
 	var max_distance_to_edge = (screen_size / 2).length()
 	
-	
 	var offset = direction * lerp(0, max_offset, distance_to_mouse / max_distance_to_edge)
 	
 	var desired_position = target.global_position + offset
