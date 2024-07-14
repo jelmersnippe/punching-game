@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://brqk2ou1f2rle"]
+[gd_scene load_steps=6 format=3 uid="uid://brqk2ou1f2rle"]
 
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="1_hjuks"]
 [ext_resource type="TileSet" uid="uid://b6n5fjkbmrfjh" path="res://arena.tres" id="2_3naeh"]
 [ext_resource type="PackedScene" uid="uid://c444r884rkxd1" path="res://enemy.tscn" id="3_c3rri"]
+[ext_resource type="PackedScene" uid="uid://desk13aq7n5bm" path="res://ui.tscn" id="5_6mjw4"]
 [ext_resource type="PackedScene" uid="uid://dpukfjaytn7gw" path="res://player_camera.tscn" id="5_2414d"]
 
 [node name="Main" type="Node2D"]
@@ -44,3 +45,8 @@ position = Vector2(680, 240)
 
 [node name="Enemy9" parent="." instance=ExtResource("3_c3rri")]
 position = Vector2(709, 225)
+
+[node name="UI" parent="." instance=ExtResource("5_6mjw4")]
+
+[connection signal="damage_received" from="Player" to="UI" method="screen_flash_on_damage"]
+[connection signal="health_changed" from="Player" to="UI" method="set_health"]

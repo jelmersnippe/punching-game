@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://desk13aq7n5bm"]
+
+[ext_resource type="Script" path="res://healthbar.gd" id="1_dv1my"]
+[ext_resource type="Script" path="res://ui.gd" id="1_fithe"]
+[ext_resource type="Shader" path="res://screen_flash.gdshader" id="2_psvfy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_usna3"]
+shader = ExtResource("2_psvfy")
+shader_parameter/intensity = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmfdv"]
+bg_color = Color(1, 0.207843, 0.141176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_onsks"]
+bg_color = Color(0, 0.724541, 0.229314, 1)
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_fithe")
+
+[node name="ScreenFlash" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_usna3")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Healthbar" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_dv1my")
+
+[node name="Bar" type="ProgressBar" parent="Healthbar"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 16.0
+offset_right = 157.0
+offset_bottom = 43.0
+theme_override_styles/background = SubResource("StyleBoxFlat_gmfdv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_onsks")
+max_value = 10.0
+step = 1.0
+value = 5.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="Healthbar"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 17.0
+offset_right = 157.0
+offset_bottom = 42.0
+text = "5/10
+"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,6 +1,9 @@
 extends CharacterBody2D
 class_name Player
 
+signal health_changed(current: int, max: int)
+signal damage_received(amount: int)
+
 @export var punch_sound: AudioStream
 @export var charge_sound: AudioStream
 var charge_sound_player: AudioStreamPlayer2D
@@ -132,11 +135,14 @@ func _on_punch_area_area_entered(area: Area2D):
 			enemy.take_damage(impact_force / 120, direction.normalized())
 			velocity /= 4
 
-@export var starting_health = 10
+@export var starting_health = 10:
+	set(value):
+		starting_health = value
+		health_changed.emit(current_health, starting_health)
 var current_health: int:
 	set(value):
 		current_health = value
-		print("new health: " + str(current_health))
+		health_changed.emit(current_health, starting_health)
 
 func _ready():
 	current_health = starting_health
@@ -167,10 +173,10 @@ func _reset_color():
 @export var hit_sound: AudioStream
 func take_damage(damage: int, hit_direction: Vector2):
 	current_health = clamp(current_health - damage, 0, starting_health)
+	damage_received.emit(damage)
 	
 	SoundManager.play_sound(hit_sound, 0)
 	shader_material.set_shader_parameter("active", true)
-	$Sprite.frame = 1
 	var hit_flash_timer = get_tree().create_timer(0.1)
 	hit_flash_timer.timeout.connect(_reset_color)
 	
@@ -184,9 +190,12 @@ func take_damage(damage: int, hit_direction: Vector2):
 
 
 func _on_hurtbox_area_entered(area):
+	if remaining_punch_time > 0:
+		return
+		
 	var parent = area.get_parent()
 	if parent is Enemy:
 		var enemy = parent as Enemy
 		var direction = enemy.position.direction_to(position)
-		take_damage(2, direction)
 		_knockback(direction.normalized(), 200, 0.2)
+		take_damage(2, direction)
