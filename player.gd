@@ -3,6 +3,7 @@ class_name Player
 
 signal health_changed(current: int, max: int)
 signal damage_received(amount: int)
+signal died()
 
 @export var punch_sound: AudioStream
 @export var charge_sound: AudioStream
@@ -202,6 +203,7 @@ func take_damage(damage: int, hit_direction: Vector2):
 	
 	if current_health <= 0:
 		$DeathParticles.emitting = true
+		died.emit()
 		var death_timer = get_tree().create_timer($DeathParticles.lifetime)
 		death_timer.timeout.connect(queue_free)
 

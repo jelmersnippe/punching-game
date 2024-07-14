@@ -15,10 +15,6 @@ var walker_chance_to_spawn: Array[float] = []
 
 var directions = [Vector2i.DOWN, Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT]
 
-func _ready():
-	var tiles = generate_map(get_viewport_rect().get_center())
-	create_tilemap(tiles)
-	
 func create_tilemap(tiles: Array[Vector2i]):
 	for tile in tilemap.get_used_cells(0):
 		tilemap.set_cell(0, tile, -1)
@@ -73,6 +69,7 @@ func generate_map(center: Vector2i) -> Array[Vector2i]:
 			unique.append(item)
 
 	map_generated.emit(center, unique)
+	create_tilemap(unique)
 	return unique
 	
 func _spawn_walker(initial_position: Vector2i, spawn_chance: float):
@@ -85,7 +82,5 @@ func _get_random_direction() -> Vector2i:
 	var direction_index = randi_range(0, len(directions) - 1)
 	return directions[direction_index]
 
-
 func _on_generate_pressed():
-	var tiles = generate_map(get_viewport_rect().get_center())
-	create_tilemap(tiles)
+	generate_map(get_viewport_rect().get_center())

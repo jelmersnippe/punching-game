@@ -28,6 +28,9 @@ format = 2
 
 [node name="Crosshair" parent="." instance=ExtResource("6_1bh30")]
 
+[node name="SpawnContainer" type="Node" parent="."]
+
 [connection signal="player_spawned" from="." to="UI" method="_on_main_player_spawned"]
 [connection signal="player_spawned" from="." to="PlayerCamera" method="_on_main_player_spawned"]
+[connection signal="start_game_requested" from="UI" to="." method="_on_ui_start_game_requested"]
 [connection signal="map_generated" from="MapGenerator" to="." method="_on_map_generator_map_generated"]

@@ -10,7 +10,8 @@ var enemy_scene = preload("res://enemy.tscn")
 func _on_map_generator_map_generated(center: Vector2i, tiles: Array[Vector2i]):
 	var player = player_scene.instantiate()
 	player.position = center
-	add_child.call_deferred(player)
+	player.died.connect($UI.show_game_over)
+	$SpawnContainer.add_child.call_deferred(player)
 	player_spawned.emit(player)
 	
 	_spawn_enemies(center, tiles)
@@ -28,5 +29,10 @@ func _spawn_enemies(center: Vector2i, tiles: Array[Vector2i]):
 	for pos in enemy_spawns:
 		var new = enemy_scene.instantiate()
 		new.position = pos * $TileMap.rendering_quadrant_size
-		add_child.call_deferred(new)
+		$SpawnContainer.add_child.call_deferred(new)
 	
+func _on_ui_start_game_requested():
+	for child in $SpawnContainer.get_children():
+		child.queue_free()
+		
+	$MapGenerator.generate_map(Vector2.ZERO)

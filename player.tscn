@@ -124,7 +124,7 @@ position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_x86ke")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.767044
+frame_progress = 0.610889
 
 [node name="Hand" type="Sprite2D" parent="Sprite"]
 position = Vector2(-3, 6)
