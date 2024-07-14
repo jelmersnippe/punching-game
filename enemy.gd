@@ -74,7 +74,7 @@ func _knocked_behavior(delta):
 	remaining_knocked_grace_time -= delta
 	velocity -= velocity.normalized() * knockback_recovery_speed
 	
-	if velocity.distance_to(Vector2.ZERO) < 2:
+	if velocity.distance_to(Vector2.ZERO) < 5:
 		_reset_sprite()
 		wander_target = position
 		current_state = State.WANDERING

@@ -19,6 +19,9 @@ var CHARGE_SPEED: int = MAX_CHARGE / TIME_TO_MAX_CHARGE
 @export var charge_cooldown = 1
 var remaining_charge_cooldown = 0
 
+var default_hand_position_left: Vector2
+var default_hand_position_right: Vector2
+
 @export var current_charge: float = 0
 @export var remaining_punch_time: float = 0:
 	set(value):
@@ -27,25 +30,25 @@ var remaining_charge_cooldown = 0
 			_reset_hands()
 
 func _reset_hands():
-	$Sprite/Hand.position = Vector2(-3, 3)
-	$Sprite/Hand2.position = Vector2(3, 3)
+	$Sprite/Hand.position = default_hand_position_left
+	$Sprite/Hand2.position = default_hand_position_right
 
 func _set_release_hands():
 	if velocity.x > 0:
-		$Sprite/Hand.position = Vector2(8, 3)
-		$Sprite/Hand2.position = Vector2(3, 3)
+		$Sprite/Hand.position = default_hand_position_left + Vector2(5, 0)
+		$Sprite/Hand2.position = default_hand_position_right
 	else:
-		$Sprite/Hand.position = Vector2(-3, 3)
-		$Sprite/Hand2.position = Vector2(-8, 3)
+		$Sprite/Hand.position = default_hand_position_left
+		$Sprite/Hand2.position = default_hand_position_right - Vector2(5, 0)
 
 func _set_charging_hands():
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	if direction.x > 0:
-		$Sprite/Hand.position = Vector2(-8, 3)
-		$Sprite/Hand2.position = Vector2(3, 3)
+		$Sprite/Hand.position = default_hand_position_left - Vector2(5, 0)
+		$Sprite/Hand2.position = default_hand_position_right
 	else:
-		$Sprite/Hand.position = Vector2(-3, 3)
-		$Sprite/Hand2.position = Vector2(8, 3)
+		$Sprite/Hand.position = default_hand_position_left
+		$Sprite/Hand2.position = default_hand_position_right + Vector2(5, 0)
 		
 func _draw():
 	var distance = current_charge * PUNCH_TIME
@@ -91,6 +94,11 @@ func _handle_grounded(delta: float):
 		
 	if Input.is_action_just_released("charge"):
 		_release_charge()
+		
+	if velocity.length() > 0:
+		$Sprite.animation = "run"
+	else:
+		$Sprite.animation = "idle"
 		
 func _charge(delta: float):
 	if remaining_charge_cooldown > 0:
@@ -145,6 +153,8 @@ var current_health: int:
 
 func _ready():
 	current_health = starting_health
+	default_hand_position_left = $Sprite/Hand.position
+	default_hand_position_right = $Sprite/Hand2.position
 	
 func _cancel_charge():
 	remaining_charge_cooldown = charge_cooldown
@@ -154,11 +164,19 @@ func _cancel_charge():
 	if charge_sound_player != null:
 		charge_sound_player.stop()
 	
-var knocked = false
+var knocked = false:
+	set(value):
+		knocked = value
+		if knocked:
+			$Sprite.animation = "hurt"
+		else:
+			$Sprite.animation = "idle"
+	
 func _knockback(normalized_impact_direction: Vector2, force: float, time: float):
 	knocked = true
 	_cancel_charge()
 	velocity = normalized_impact_direction * force
+	
 	print(get_name() + " knocked with velocity " + str(velocity))
 	
 	var timer = get_tree().create_timer(time)
