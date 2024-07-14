@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://brqk2ou1f2rle"]
+[gd_scene load_steps=7 format=3 uid="uid://brqk2ou1f2rle"]
 
 [ext_resource type="Script" path="res://game_manager.gd" id="1_r6xi6"]
 [ext_resource type="Script" path="res://map_generator.gd" id="1_uxtxt"]
 [ext_resource type="TileSet" uid="uid://b6n5fjkbmrfjh" path="res://arena.tres" id="2_3naeh"]
 [ext_resource type="PackedScene" uid="uid://desk13aq7n5bm" path="res://ui.tscn" id="5_6mjw4"]
 [ext_resource type="PackedScene" uid="uid://dpukfjaytn7gw" path="res://player_camera.tscn" id="5_2414d"]
+[ext_resource type="PackedScene" uid="uid://ohm5b1oc5waw" path="res://crosshair.tscn" id="6_1bh30"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_r6xi6")
@@ -24,6 +25,8 @@ chance_to_spawn_walker = 0.4
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("2_3naeh")
 format = 2
+
+[node name="Crosshair" parent="." instance=ExtResource("6_1bh30")]
 
 [connection signal="player_spawned" from="." to="UI" method="_on_main_player_spawned"]
 [connection signal="player_spawned" from="." to="PlayerCamera" method="_on_main_player_spawned"]
