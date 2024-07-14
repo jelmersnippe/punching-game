@@ -21,7 +21,10 @@ var current_health:
 var knocked_grace_time = 0.1
 var remaining_knocked_grace_time = 0
 
-var current_state: State = State.WANDERING
+var current_state: State = State.WANDERING:
+	set(value):
+		current_state = value
+		$Label.text = State.keys()[value]
 enum State {
 	WANDERING,
 	FOLLOWING,
@@ -91,7 +94,7 @@ func _wander_behavior(delta):
 	if position.distance_to(wander_target) < 2:
 		wander_target = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
 		
-	var direction = (wander_target - position).normalized()
+	var direction = position.direction_to(wander_target)
 		
 	velocity = direction * speed
 	
@@ -109,7 +112,10 @@ func _follow_behavior():
 		current_state = State.WANDERING
 		return
 	
-	var direction = (target.position - position).normalized()
+	$NavigationAgent2D.target_position = target.position
+	var position_to_move_to = $NavigationAgent2D.get_next_path_position()
+	var direction = position.direction_to(position_to_move_to)
+		
 	velocity = direction * speed
 	
 func knockback(normalized_impact_direction: Vector2, force: float):

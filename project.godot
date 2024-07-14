@@ -67,6 +67,10 @@ move_down={
 2d_physics/layer_3="items"
 2d_physics/layer_4="enemies"
 
+[navigation]
+
+2d/default_edge_connection_margin=12.0
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
