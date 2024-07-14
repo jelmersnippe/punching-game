@@ -51,8 +51,6 @@ func _draw():
 	var distance = current_charge * PUNCH_TIME
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	draw_line(Vector2(0, 0), distance * direction, Color.REBECCA_PURPLE, 2)
-	
-	$Sprite.flip_h = direction.x < 0
 
 func _physics_process(delta):
 	if knocked:
@@ -78,9 +76,10 @@ func _handle_grounded(delta: float):
 	var input = Vector2(Input.get_axis("move_left", "move_right"), Input.get_axis("move_up", "move_down")).normalized()
 	velocity = input * SPEED
 		
-	if input.x > 0:
+	var face_direction = global_position.direction_to(get_global_mouse_position())
+	if face_direction.x > 0:
 		$Sprite.flip_h = false
-	elif input.x < 0:
+	elif face_direction.x < 0:
 		$Sprite.flip_h = true
 		
 	if Input.is_action_pressed("charge"):

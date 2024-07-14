@@ -30,4 +30,3 @@ func _spawn_enemies(center: Vector2i, tiles: Array[Vector2i]):
 		new.position = pos * $TileMap.rendering_quadrant_size
 		add_child.call_deferred(new)
 	
-	
