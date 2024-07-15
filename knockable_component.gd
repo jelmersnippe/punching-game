@@ -5,6 +5,10 @@ signal on_knocked_changed(is_knocked: bool)
 
 @export var velocity_component: VelocityComponent
 
+@export var knockback_recovery_speed: float = 5
+@export var knockback_velocity_distance_deadzone: float = 5
+
+
 var knocked_grace_time = 0.1
 var is_knocked = false:
 	set(value):
@@ -14,8 +18,17 @@ var can_be_knocked = true
 
 func _ready():
 	area_entered.connect(_on_area_entered)
+	
+func _process(delta):
+	if not is_knocked:
+		return
+	
+	velocity_component.velocity -= velocity_component.velocity.normalized() * knockback_recovery_speed
+	
+	if velocity_component.velocity.length() < knockback_velocity_distance_deadzone:
+		is_knocked = false
 
-func knockback(impact_direction: Vector2, force: float, time: float) -> void:
+func knockback(impact_direction: Vector2, force: float) -> void:
 	if is_knocked: 
 		return
 		
@@ -25,9 +38,6 @@ func knockback(impact_direction: Vector2, force: float, time: float) -> void:
 	var grace_timer = get_tree().create_timer(knocked_grace_time)
 	grace_timer.timeout.connect(func(): can_be_knocked = true)
 	
-	var knockback_timer = get_tree().create_timer(time)
-	knockback_timer.timeout.connect(func(): is_knocked = false)
-	
 	velocity_component.velocity = impact_direction.normalized() * force
 
 func _on_area_entered(area):
@@ -35,4 +45,4 @@ func _on_area_entered(area):
 		return
 		
 	var knockback_component = area as KnockbackComponent
-	knockback(area.global_position.direction_to(global_position), knockback_component.knockback_force, knockback_component.knockback_time)
+	knockback(area.global_position.direction_to(global_position), knockback_component.knockback_force)

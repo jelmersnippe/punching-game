@@ -172,10 +172,12 @@ script = ExtResource("7_rea06")
 position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_pdin5")
 
-[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component", "hit_particles")]
 collision_layer = 8
 script = ExtResource("9_qos3h")
 health_component = NodePath("../HealthComponent")
+hit_sound = ExtResource("2_8myha")
+hit_particles = NodePath("../HitParticles")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, 1)

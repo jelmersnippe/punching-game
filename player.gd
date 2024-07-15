@@ -26,6 +26,7 @@ var default_cue_position: Vector2
 @export var remaining_punch_time: float = 0:
 	set(value):
 		remaining_punch_time = value
+		$RotationPoint/KnockbackComponent.knockback_force = (remaining_punch_time / PUNCH_TIME) * MAX_CHARGE
 		if remaining_punch_time <= 0:
 			_reset_hands()
 
@@ -137,9 +138,6 @@ func _release_charge():
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	velocity_component.velocity = direction * MAX_CHARGE
 	
-	$RotationPoint/KnockbackComponent.knockback_force = MAX_CHARGE
-	$RotationPoint/KnockbackComponent.knockback_time = remaining_punch_time
-	
 	_set_release_hands()
 	$TrailingParticles.emitting = true
 	queue_redraw()
@@ -154,8 +152,6 @@ func _cancel_charge():
 	queue_redraw()
 	if charge_sound_player != null:
 		charge_sound_player.stop()
-
-@export var hit_sound: AudioStream
 
 func _on_knockable_component_on_knocked_changed(is_knocked):
 	if not is_knocked:

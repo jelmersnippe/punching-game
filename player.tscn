@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://diye237awnyll"]
+[gd_scene load_steps=31 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
 [ext_resource type="AudioStream" uid="uid://b06ogbyftj1hs" path="res://sounds/punch.wav" id="2_ucn14"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://hitbox_component.gd" id="9_gmd1v"]
 [ext_resource type="PackedScene" uid="uid://r7beqteaan1l" path="res://hit_flash_component.tscn" id="10_xt5ej"]
 [ext_resource type="PackedScene" uid="uid://cxqa47rbftsf4" path="res://knockable_component.tscn" id="11_rwtmh"]
+[ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="12_h8uy1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx2q4"]
 atlas = ExtResource("4_butkp")
@@ -222,9 +223,11 @@ texture = ExtResource("7_r5r06")
 [node name="VelocityComponent" type="Node" parent="."]
 script = ExtResource("9_ej2s8")
 
-[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("8_qqism")]
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component", "hit_particles") instance=ExtResource("8_qqism")]
 collision_mask = 8
 health_component = NodePath("../HealthComponent")
+hit_sound = ExtResource("12_h8uy1")
+hit_particles = NodePath("../HitParticles")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, 1)
@@ -233,6 +236,7 @@ shape = SubResource("RectangleShape2D_x74aa")
 [node name="KnockableComponent" parent="." node_paths=PackedStringArray("velocity_component") instance=ExtResource("11_rwtmh")]
 collision_mask = 8
 velocity_component = NodePath("../VelocityComponent")
+knockback_recovery_speed = 50.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
 position = Vector2(0, 1)
@@ -242,5 +246,4 @@ shape = SubResource("RectangleShape2D_x74aa")
 sprite = NodePath("../Sprite")
 
 [connection signal="hit" from="HurtboxComponent" to="HitFlashComponent" method="flash"]
-[connection signal="area_entered" from="KnockableComponent" to="KnockableComponent" method="_on_area_entered"]
 [connection signal="on_knocked_changed" from="KnockableComponent" to="." method="_on_knockable_component_on_knocked_changed"]
