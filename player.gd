@@ -1,9 +1,9 @@
 extends CharacterBody2D
 class_name Player
 
-signal health_changed(current: int, max: int)
-signal damage_received(amount: int)
-signal died()
+@export var health_component: HealthComponent
+@export var knockable_component: KnockableComponent
+@export var velocity_component: VelocityComponent
 
 @export var punch_sound: AudioStream
 @export var charge_sound: AudioStream
@@ -30,9 +30,21 @@ var default_cue_position: Vector2
 			_reset_hands()
 
 func _reset_hands():
+	$RotationPoint/Cue/CollisionShape2D.disabled = true
+	$RotationPoint/KnockbackComponent/CollisionShape2D.disabled = true
+	
+	$HurtboxComponent/CollisionShape2D.disabled = false
+	$KnockableComponent/CollisionShape2D.disabled = false
+	
 	$RotationPoint/Cue.position = default_cue_position
 
 func _set_release_hands():
+	$RotationPoint/Cue/CollisionShape2D.disabled = false
+	$RotationPoint/KnockbackComponent/CollisionShape2D.disabled = false
+	
+	$HurtboxComponent/CollisionShape2D.disabled = true
+	$KnockableComponent/CollisionShape2D.disabled = true
+	
 	$RotationPoint/Cue.position = default_cue_position + Vector2(5,0)
 
 func _set_charging_hands():
@@ -44,9 +56,13 @@ func _draw():
 	var cue_position = Vector2.ZERO + $RotationPoint.position + $RotationPoint/Cue.position
 	draw_line(cue_position, cue_position + distance * direction, Color.REBECCA_PURPLE, 2)
 
+func _move():
+	velocity = velocity_component.velocity
+	move_and_slide()
+	
 func _physics_process(delta):
-	if knocked:
-		move_and_slide()
+	if knockable_component.is_knocked:
+		_move()
 		return
 		
 	$RotationPoint.look_at(get_global_mouse_position())
@@ -61,19 +77,19 @@ func _physics_process(delta):
 	if remaining_punch_time > 0:
 		remaining_punch_time -= delta
 		if remaining_punch_time <= 0:
-			velocity /= 4
+			velocity_component.velocity /= 4
 			$TrailingParticles.emitting = false
 	if remaining_charge_cooldown > 0:
 		remaining_charge_cooldown -= delta
 			
-	move_and_slide()
+	_move()
 		
 func _handle_grounded(delta: float):
 	if remaining_punch_time > 0:
 		return
 		
 	var input = Vector2(Input.get_axis("move_left", "move_right"), Input.get_axis("move_up", "move_down")).normalized()
-	velocity = input * SPEED
+	velocity_component.velocity = input * SPEED
 		
 	var face_direction = global_position.direction_to(get_global_mouse_position())
 	if face_direction.x > 0:
@@ -85,13 +101,13 @@ func _handle_grounded(delta: float):
 		if current_charge <= 0 and remaining_charge_cooldown <= 0:
 			charge_sound_player = SoundManager.play_sound(charge_sound, -20)
 			
-		velocity *= CHARGE_SLOWDOWN
+		velocity_component.velocity *= CHARGE_SLOWDOWN
 		_charge(delta)
 		
 	if Input.is_action_just_released("charge"):
 		_release_charge()
 		
-	if velocity.length() > 0:
+	if velocity_component.velocity.length() > 0:
 		$Sprite.animation = "run"
 	else:
 		$Sprite.animation = "idle"
@@ -119,36 +135,16 @@ func _release_charge():
 	
 	SoundManager.play_sound(punch_sound, -10)
 	var direction = (get_global_mouse_position() - global_position).normalized()
-	velocity = direction * MAX_CHARGE
+	velocity_component.velocity = direction * MAX_CHARGE
+	
+	$RotationPoint/KnockbackComponent.knockback_force = MAX_CHARGE
+	$RotationPoint/KnockbackComponent.knockback_time = remaining_punch_time
+	
 	_set_release_hands()
 	$TrailingParticles.emitting = true
 	queue_redraw()
 	
-	for area in $RotationPoint/Cue.get_overlapping_areas():
-		_on_punch_area_area_entered(area)
-		
-func _on_punch_area_area_entered(area: Area2D):
-	if remaining_punch_time > 0:
-		var parent = area.get_parent()
-		if parent is Enemy:
-			var enemy = parent as Enemy
-			var impact_force = (remaining_punch_time / PUNCH_TIME) * MAX_CHARGE
-			var direction = position.direction_to(enemy.position)
-			enemy.knockback(direction.normalized(), impact_force)
-			enemy.take_damage(impact_force / 120, direction.normalized())
-			velocity /= 4
-
-@export var starting_health = 10:
-	set(value):
-		starting_health = value
-		health_changed.emit(current_health, starting_health)
-var current_health: int:
-	set(value):
-		current_health = value
-		health_changed.emit(current_health, starting_health)
-
 func _ready():
-	current_health = starting_health
 	default_cue_position = $RotationPoint/Cue.position
 	
 func _cancel_charge():
@@ -158,57 +154,11 @@ func _cancel_charge():
 	queue_redraw()
 	if charge_sound_player != null:
 		charge_sound_player.stop()
-	
-var knocked = false:
-	set(value):
-		knocked = value
-		if knocked:
-			$Sprite.animation = "hurt"
-		else:
-			$Sprite.animation = "idle"
-	
-func _knockback(normalized_impact_direction: Vector2, force: float, time: float):
-	knocked = true
-	_cancel_charge()
-	velocity = normalized_impact_direction * force
-	
-	print(get_name() + " knocked with velocity " + str(velocity))
-	
-	var timer = get_tree().create_timer(time)
-	timer.timeout.connect(func(): knocked = false)
-
-@onready var shader_material = $Sprite.material as ShaderMaterial
-
-func _reset_color():
-	shader_material.set_shader_parameter("active", false)
 
 @export var hit_sound: AudioStream
-func take_damage(damage: int, hit_direction: Vector2):
-	current_health = clamp(current_health - damage, 0, starting_health)
-	damage_received.emit(damage)
-	
-	SoundManager.play_sound(hit_sound, 0)
-	shader_material.set_shader_parameter("active", true)
-	var hit_flash_timer = get_tree().create_timer(0.1)
-	hit_flash_timer.timeout.connect(_reset_color)
-	
-	$HitParticles.direction = hit_direction
-	$HitParticles.emitting = true
-	
-	if current_health <= 0:
-		$DeathParticles.emitting = true
-		died.emit()
-		var death_timer = get_tree().create_timer($DeathParticles.lifetime)
-		death_timer.timeout.connect(queue_free)
 
-
-func _on_hurtbox_area_entered(area):
-	if remaining_punch_time > 0:
+func _on_knockable_component_on_knocked_changed(is_knocked):
+	if not is_knocked:
 		return
 		
-	var parent = area.get_parent()
-	if parent is Enemy:
-		var enemy = parent as Enemy
-		var direction = enemy.position.direction_to(position)
-		_knockback(direction.normalized(), 200, 0.2)
-		take_damage(2, direction)
+	_cancel_charge()

@@ -29,6 +29,3 @@ position = Vector2(477, 515)
 
 [node name="Enemy3" parent="." instance=ExtResource("5_2pd8k")]
 position = Vector2(545, 576)
-
-[connection signal="damage_received" from="Player" to="UI" method="screen_flash_on_damage"]
-[connection signal="health_changed" from="Player" to="UI" method="set_health"]

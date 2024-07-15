@@ -1,10 +1,18 @@
-[gd_scene load_steps=18 format=3 uid="uid://c444r884rkxd1"]
+[gd_scene load_steps=24 format=3 uid="uid://c444r884rkxd1"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_bfs01"]
 [ext_resource type="Shader" path="res://hit_flash.gdshader" id="2_0fgyv"]
 [ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="2_8myha"]
 [ext_resource type="Texture2D" uid="uid://cwlij5qwegpty" path="res://sprites/enemy.png" id="2_w57ym"]
 [ext_resource type="Texture2D" uid="uid://7mkrlcjkgxkk" path="res://sprites/enemy_hit.png" id="4_l4i50"]
+[ext_resource type="Script" path="res://hitbox_component.gd" id="6_ige5n"]
+[ext_resource type="Script" path="res://knockback_component.gd" id="7_rea06"]
+[ext_resource type="Script" path="res://hurtbox_component.gd" id="9_qos3h"]
+[ext_resource type="Script" path="res://health_component.gd" id="10_2pj62"]
+[ext_resource type="Script" path="res://knockable_component.gd" id="11_mgcdm"]
+[ext_resource type="Script" path="res://velocity_component.gd" id="12_ha06x"]
+[ext_resource type="Script" path="res://hit_flash_component.gd" id="13_dfj1k"]
+[ext_resource type="PackedScene" uid="uid://b8fgwm6nhyjfc" path="res://healthbar.tscn" id="13_nsanv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(4, 10)
@@ -28,15 +36,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdo6m"]
-bg_color = Color(1, 0.339232, 0.310417, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3qf0"]
-bg_color = Color(0.218966, 0.709132, 0.33525, 1)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hk3ai"]
-size = Vector2(12, 18)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_hc7r8"]
 
 [sub_resource type="Curve" id="Curve_p85g6"]
@@ -57,15 +56,20 @@ point_count = 2
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.99361, 0.34586), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ia0s5"]
-size = Vector2(6, 12)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pdin5"]
+size = Vector2(5, 10)
 
-[node name="Enemy" type="CharacterBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hk3ai"]
+size = Vector2(12, 18)
+
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("velocity_component", "knockable_component")]
 collision_layer = 8
 collision_mask = 10
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_bfs01")
+velocity_component = NodePath("VelocityComponent")
+knockable_component = NodePath("KnockableComponent")
 hit_sound = ExtResource("2_8myha")
 wander_range = Vector2(60, 60)
 
@@ -78,28 +82,8 @@ material = SubResource("ShaderMaterial_h34eh")
 sprite_frames = SubResource("SpriteFrames_hthlf")
 speed_scale = 0.0
 
-[node name="Healthbar" type="ProgressBar" parent="."]
-offset_left = -11.0
-offset_top = -12.0
-offset_right = 11.0
-offset_bottom = -8.0
-theme_override_styles/background = SubResource("StyleBoxFlat_vdo6m")
-theme_override_styles/fill = SubResource("StyleBoxFlat_q3qf0")
-max_value = 10.0
-step = 1.0
-value = 7.0
-show_percentage = false
-
 [node name="RayCast2D" type="RayCast2D" parent="."]
 collision_mask = 2
-
-[node name="Hurtbox" type="Area2D" parent="."]
-collision_layer = 8
-collision_mask = 9
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2(0, 1)
-shape = SubResource("RectangleShape2D_hk3ai")
 
 [node name="DetectionRange" type="Area2D" parent="."]
 collision_layer = 0
@@ -147,13 +131,6 @@ scale_amount_max = 4.0
 scale_amount_curve = SubResource("Curve_lqh34")
 color = Color(1, 0.117647, 0.235294, 1)
 
-[node name="Hitbox" type="Area2D" parent="."]
-collision_layer = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(0, 1)
-shape = SubResource("RectangleShape2D_ia0s5")
-
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 avoidance_enabled = true
 radius = 40.0
@@ -179,6 +156,59 @@ text = "WANDERING"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="area_entered" from="Hurtbox" to="." method="_on_hitbox_area_entered"]
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 8
+script = ExtResource("6_ige5n")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_pdin5")
+
+[node name="KnockbackComponent" type="Area2D" parent="."]
+collision_layer = 8
+script = ExtResource("7_rea06")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KnockbackComponent"]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_pdin5")
+
+[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+collision_layer = 8
+script = ExtResource("9_qos3h")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_hk3ai")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("10_2pj62")
+
+[node name="KnockableComponent" type="Area2D" parent="." node_paths=PackedStringArray("velocity_component")]
+collision_layer = 8
+script = ExtResource("11_mgcdm")
+velocity_component = NodePath("../VelocityComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_hk3ai")
+
+[node name="VelocityComponent" type="Node" parent="."]
+script = ExtResource("12_ha06x")
+
+[node name="HitFlashComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("13_dfj1k")
+sprite = NodePath("../Sprite")
+
+[node name="Healthbar" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("13_nsanv")]
+offset_left = -12.0
+offset_top = -16.0
+offset_right = 13.0
+offset_bottom = -11.0
+health_component = NodePath("../HealthComponent")
+
 [connection signal="body_entered" from="DetectionRange" to="." method="_on_detection_range_body_entered"]
 [connection signal="body_exited" from="DetectionRange" to="." method="_on_detection_range_body_exited"]
+[connection signal="hit" from="HurtboxComponent" to="HitFlashComponent" method="flash"]
+[connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
+[connection signal="on_knocked_changed" from="KnockableComponent" to="." method="_on_knockable_component_on_knocked_changed"]

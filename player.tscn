@@ -1,15 +1,18 @@
-[gd_scene load_steps=23 format=3 uid="uid://diye237awnyll"]
+[gd_scene load_steps=30 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
 [ext_resource type="AudioStream" uid="uid://b06ogbyftj1hs" path="res://sounds/punch.wav" id="2_ucn14"]
 [ext_resource type="AudioStream" uid="uid://c5pwpfy6yosoc" path="res://sounds/charging-machine-90403.mp3" id="3_sqgcf"]
-[ext_resource type="Shader" path="res://hit_flash.gdshader" id="4_76iuq"]
+[ext_resource type="Material" uid="uid://c5kakjx6hscw" path="res://hit_flash_material.tres" id="4_31d0y"]
 [ext_resource type="Texture2D" uid="uid://cxogbwb7e75n4" path="res://sprites/AnimationSheet.png" id="4_butkp"]
-[ext_resource type="PackedScene" uid="uid://b6e30jedyyd58" path="res://cue.tscn" id="7_ivu1l"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8e1s"]
-shader = ExtResource("4_76iuq")
-shader_parameter/active = false
+[ext_resource type="PackedScene" uid="uid://3dqeis62tj7i" path="res://health_component.tscn" id="7_7xi7d"]
+[ext_resource type="Texture2D" uid="uid://b337kfwbwphru" path="res://sprites/cue.png" id="7_r5r06"]
+[ext_resource type="Script" path="res://knockback_component.gd" id="8_5w3uk"]
+[ext_resource type="PackedScene" uid="uid://bqyn4sh5fnp4e" path="res://hurtbox_component.tscn" id="8_qqism"]
+[ext_resource type="Script" path="res://velocity_component.gd" id="9_ej2s8"]
+[ext_resource type="Script" path="res://hitbox_component.gd" id="9_gmd1v"]
+[ext_resource type="PackedScene" uid="uid://r7beqteaan1l" path="res://hit_flash_component.tscn" id="10_xt5ej"]
+[ext_resource type="PackedScene" uid="uid://cxqa47rbftsf4" path="res://knockable_component.tscn" id="11_rwtmh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx2q4"]
 atlas = ExtResource("4_butkp")
@@ -103,20 +106,26 @@ point_count = 2
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.99361, 0.34586), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j56pb"]
+size = Vector2(24, 4)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x74aa"]
 size = Vector2(5, 14)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_component", "knockable_component", "velocity_component")]
 position = Vector2(107, 218)
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_4gvax")
+health_component = NodePath("HealthComponent")
+knockable_component = NodePath("KnockableComponent")
+velocity_component = NodePath("VelocityComponent")
 punch_sound = ExtResource("2_ucn14")
 charge_sound = ExtResource("3_sqgcf")
 SPEED = 170.0
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_u8e1s")
+material = ExtResource("4_31d0y")
 position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_x86ke")
 animation = &"idle"
@@ -179,20 +188,59 @@ scale_amount_max = 4.0
 scale_amount_curve = SubResource("Curve_spmb2")
 color = Color(1, 0.117647, 0.235294, 1)
 
-[node name="Hurtbox" type="Area2D" parent="."]
-collision_mask = 8
+[node name="RotationPoint" type="Node2D" parent="."]
+z_as_relative = false
+position = Vector2(0, 3)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="Cue" type="Area2D" parent="RotationPoint"]
+collision_layer = 7
+collision_mask = 14
+script = ExtResource("9_gmd1v")
+contact_damage = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RotationPoint/Cue"]
+position = Vector2(5, 0)
+shape = SubResource("RectangleShape2D_j56pb")
+disabled = true
+
+[node name="KnockbackComponent" type="Area2D" parent="RotationPoint"]
+collision_layer = 7
+collision_mask = 14
+script = ExtResource("8_5w3uk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RotationPoint/KnockbackComponent"]
+position = Vector2(5, 0)
+shape = SubResource("RectangleShape2D_j56pb")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="RotationPoint"]
+position = Vector2(5, 0)
+texture = ExtResource("7_r5r06")
+
+[node name="HealthComponent" parent="." instance=ExtResource("7_7xi7d")]
+
+[node name="VelocityComponent" type="Node" parent="."]
+script = ExtResource("9_ej2s8")
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("8_qqism")]
+collision_mask = 8
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_x74aa")
 
-[node name="RotationPoint" type="Node2D" parent="."]
-z_index = 1
-position = Vector2(0, 3)
-
-[node name="Cue" parent="RotationPoint" instance=ExtResource("7_ivu1l")]
-position = Vector2(5, 0)
+[node name="KnockableComponent" parent="." node_paths=PackedStringArray("velocity_component") instance=ExtResource("11_rwtmh")]
 collision_mask = 8
+velocity_component = NodePath("../VelocityComponent")
 
-[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
-[connection signal="area_entered" from="RotationPoint/Cue" to="." method="_on_punch_area_area_entered"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_x74aa")
+
+[node name="HitFlashComponent" parent="." node_paths=PackedStringArray("sprite") instance=ExtResource("10_xt5ej")]
+sprite = NodePath("../Sprite")
+
+[connection signal="hit" from="HurtboxComponent" to="HitFlashComponent" method="flash"]
+[connection signal="area_entered" from="KnockableComponent" to="KnockableComponent" method="_on_area_entered"]
+[connection signal="on_knocked_changed" from="KnockableComponent" to="." method="_on_knockable_component_on_knocked_changed"]

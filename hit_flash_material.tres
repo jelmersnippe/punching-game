@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c5kakjx6hscw"]
+
+[ext_resource type="Shader" path="res://hit_flash.gdshader" id="1_wmnxv"]
+
+[resource]
+shader = ExtResource("1_wmnxv")
+shader_parameter/active = false

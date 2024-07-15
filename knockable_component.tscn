@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxqa47rbftsf4"]
+
+[ext_resource type="Script" path="res://knockable_component.gd" id="1_vigm4"]
+
+[node name="KnockableComponent" type="Area2D"]
+script = ExtResource("1_vigm4")

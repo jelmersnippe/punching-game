@@ -10,7 +10,7 @@ var enemy_scene = preload("res://enemy.tscn")
 func _on_map_generator_map_generated(center: Vector2i, tiles: Array[Vector2i]):
 	var player = player_scene.instantiate()
 	player.position = center
-	player.died.connect($UI.show_game_over)
+	player.health_component.died.connect($UI.show_game_over)
 	$SpawnContainer.add_child.call_deferred(player)
 	player_spawned.emit(player)
 	
