@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://c444r884rkxd1"]
+[gd_scene load_steps=26 format=3 uid="uid://c444r884rkxd1"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_bfs01"]
 [ext_resource type="Shader" path="res://hit_flash.gdshader" id="2_0fgyv"]
@@ -12,7 +12,9 @@
 [ext_resource type="Script" path="res://knockable_component.gd" id="11_mgcdm"]
 [ext_resource type="Script" path="res://velocity_component.gd" id="12_ha06x"]
 [ext_resource type="Script" path="res://hit_flash_component.gd" id="13_dfj1k"]
-[ext_resource type="PackedScene" uid="uid://b8fgwm6nhyjfc" path="res://healthbar.tscn" id="13_nsanv"]
+[ext_resource type="PackedScene" path="res://healthbar.tscn" id="13_nsanv"]
+[ext_resource type="Script" path="res://bounce_component.gd" id="14_w6mhj"]
+[ext_resource type="Script" path="res://movement_component.gd" id="15_vjkan"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(4, 10)
@@ -62,7 +64,7 @@ size = Vector2(5, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hk3ai"]
 size = Vector2(12, 18)
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("velocity_component", "knockable_component")]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("velocity_component", "knockable_component", "bounce_component")]
 collision_layer = 8
 collision_mask = 10
 motion_mode = 1
@@ -70,6 +72,7 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_bfs01")
 velocity_component = NodePath("VelocityComponent")
 knockable_component = NodePath("KnockableComponent")
+bounce_component = NodePath("BounceComponent")
 hit_sound = ExtResource("2_8myha")
 wander_range = Vector2(60, 60)
 
@@ -208,6 +211,16 @@ offset_top = -16.0
 offset_right = 13.0
 offset_bottom = -11.0
 health_component = NodePath("../HealthComponent")
+
+[node name="BounceComponent" type="Node2D" parent="." node_paths=PackedStringArray("velocity_component", "movement_component")]
+script = ExtResource("14_w6mhj")
+velocity_component = NodePath("../VelocityComponent")
+movement_component = NodePath("../MovementComponent")
+
+[node name="MovementComponent" type="Node" parent="." node_paths=PackedStringArray("body", "velocity_component")]
+script = ExtResource("15_vjkan")
+body = NodePath("..")
+velocity_component = NodePath("../VelocityComponent")
 
 [connection signal="body_entered" from="DetectionRange" to="." method="_on_detection_range_body_entered"]
 [connection signal="body_exited" from="DetectionRange" to="." method="_on_detection_range_body_exited"]

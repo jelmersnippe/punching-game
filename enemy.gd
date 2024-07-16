@@ -3,6 +3,7 @@ class_name Enemy
 
 @export var velocity_component: VelocityComponent
 @export var knockable_component: KnockableComponent
+@export var bounce_component: BounceComponent
 
 @export var hit_sound: AudioStream
 
@@ -31,14 +32,11 @@ func _ready():
 	var detection_shape = CircleShape2D.new()
 	detection_shape.radius = detection_range
 	$DetectionRange/CollisionShape2D.shape = detection_shape
-
-func _move():
-	velocity = velocity_component.velocity
-	move_and_slide()
+	
+	bounce_component.process_mode = Node.PROCESS_MODE_DISABLED
 
 func _process(delta):
 	if knockable_component.is_knocked:
-		_move()
 		return
 		
 	match current_state:
@@ -51,8 +49,6 @@ func _process(delta):
 		$Sprite.flip_h = false
 	elif velocity_component.velocity.x < 0:
 		$Sprite.flip_h = true
-		
-	_move()
 	
 var wander_target: Vector2
 func _wander_behavior(delta):
@@ -114,6 +110,8 @@ func _on_health_component_died():
 
 func _on_knockable_component_on_knocked_changed(is_knocked):
 	if is_knocked:
+		bounce_component.process_mode = Node.PROCESS_MODE_INHERIT
 		$Sprite.frame = 1
 	else:
+		bounce_component.process_mode = Node.PROCESS_MODE_DISABLED
 		$Sprite.frame = 0
