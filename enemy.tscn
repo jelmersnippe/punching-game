@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://c444r884rkxd1"]
+[gd_scene load_steps=27 format=3 uid="uid://c444r884rkxd1"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_bfs01"]
 [ext_resource type="Shader" path="res://hit_flash.gdshader" id="2_0fgyv"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://healthbar.tscn" id="13_nsanv"]
 [ext_resource type="Script" path="res://bounce_component.gd" id="14_w6mhj"]
 [ext_resource type="Script" path="res://movement_component.gd" id="15_vjkan"]
+[ext_resource type="Script" path="res://toggleable.gd" id="15_vplwg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(4, 10)
@@ -216,6 +217,9 @@ health_component = NodePath("../HealthComponent")
 script = ExtResource("14_w6mhj")
 velocity_component = NodePath("../VelocityComponent")
 movement_component = NodePath("../MovementComponent")
+
+[node name="Toggleable" type="Node" parent="BounceComponent"]
+script = ExtResource("15_vplwg")
 
 [node name="MovementComponent" type="Node" parent="." node_paths=PackedStringArray("body", "velocity_component")]
 script = ExtResource("15_vjkan")

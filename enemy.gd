@@ -32,6 +32,7 @@ func _ready():
 	var detection_shape = CircleShape2D.new()
 	detection_shape.radius = detection_range
 	$DetectionRange/CollisionShape2D.shape = detection_shape
+	$BounceComponent/Toggleable.disable()
 
 func _process(delta):
 	if knockable_component.is_knocked:
@@ -108,6 +109,8 @@ func _on_health_component_died():
 
 func _on_knockable_component_on_knocked_changed(is_knocked):
 	if is_knocked:
+		$BounceComponent/Toggleable.enable()
 		$Sprite.frame = 1
 	else:
+		$BounceComponent/Toggleable.disable()
 		$Sprite.frame = 0

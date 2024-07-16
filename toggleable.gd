@@ -19,8 +19,10 @@ func enable() -> void:
 
 	# Reconnect signals if they were stored
 	for signal_data in disconnected_signals:
-		target.connect(signal_data['signal'], signal_data['target'], signal_data['method'])
+		signal_data.signal.connect(signal_data.callable, signal_data.flags)
 	disconnected_signals.clear()
+	
+	enabled = true
 
 	
 func disable() -> void:
@@ -33,13 +35,14 @@ func disable() -> void:
 	target.set_process_unhandled_input(false)
 	target.set_process_unhandled_key_input(false)
 
-	# Disconnect and store signals
-	var signal_list = target.get_signal_list()
+	var signal_list = target.get_incoming_connections()
 	for s in signal_list:
 		disconnected_signals.append({
 			'signal': s.signal,
-			'target': s.target,
-			'method': s.method
+			'callable': s.callable,
+			'flags': s.flags
 		})
-		target.disconnect(s.signal, s.method)
+		s.signal.disconnect(s.callable)
+		
+	enabled = false
 	
