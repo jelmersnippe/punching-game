@@ -10,6 +10,5 @@ func _ready():
 	movement_component.collided.connect(_bounce)
 
 func _bounce(collision: KinematicCollision2D):
-	print("bouncing off collision")
 	velocity_component.velocity = velocity_component.velocity.bounce(collision.get_normal())
 	velocity_component.velocity -= velocity_component.velocity.normalized() * velocity_decrease_on_bounce

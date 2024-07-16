@@ -15,6 +15,5 @@ func _move(delta: float):
 	body.move_and_slide()
 	
 	if collision != null:
-		print("emitting collision")
 		collided.emit(collision)
 	
