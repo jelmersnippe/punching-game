@@ -36,6 +36,5 @@ func _complete_attack():
 	timer.timeout.connect(_finish_cooldown)
 	
 func _finish_cooldown():
-	print("cooldown finished for " + get_name())
 	can_attack = true
 	cooldown_ready.emit()

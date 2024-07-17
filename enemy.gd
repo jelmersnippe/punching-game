@@ -16,7 +16,6 @@ class_name Enemy
 
 var current_state: State = State.WANDERING:
 	set(value):
-		print(get_name() + " changed to state " + State.keys()[value])
 		current_state = value
 		$Label.text = State.keys()[value]
 		

@@ -14,5 +14,4 @@ func execute(target: Node2D):
 	projectile.look_at(target.global_position)
 	get_tree().get_root().add_child(projectile)
 	
-	print("ranged attack done")
 	_complete_attack()
