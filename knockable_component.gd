@@ -8,7 +8,6 @@ signal on_knocked_changed(is_knocked: bool)
 @export var knockback_recovery_speed: float = 5
 @export var knockback_velocity_distance_deadzone: float = 5
 
-
 var knocked_grace_time = 0.1
 var is_knocked = false:
 	set(value):

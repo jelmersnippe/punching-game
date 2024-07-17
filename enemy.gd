@@ -2,8 +2,8 @@ extends CharacterBody2D
 class_name Enemy
 
 @export var velocity_component: VelocityComponent
+
 @export var knockable_component: KnockableComponent
-@export var bounce_component: BounceComponent
 
 @export var hit_sound: AudioStream
 
@@ -109,8 +109,28 @@ func _on_health_component_died():
 
 func _on_knockable_component_on_knocked_changed(is_knocked):
 	if is_knocked:
+		$KnockbackComponent.set_collision_layer_value(1, true)
+		$KnockbackComponent.set_collision_layer_value(4, false)
+		$KnockbackComponent.set_collision_mask_value(1, false)
+		$KnockbackComponent.set_collision_mask_value(4, true)
+		
+		$HitboxComponent.set_collision_layer_value(1, true)
+		$HitboxComponent.set_collision_layer_value(4, false)
+		$HitboxComponent.set_collision_mask_value(1, false)
+		$HitboxComponent.set_collision_mask_value(4, true)
+		
 		$BounceComponent/Toggleable.enable()
 		$Sprite.frame = 1
 	else:
+		$KnockbackComponent.set_collision_layer_value(1, false)
+		$KnockbackComponent.set_collision_layer_value(4, true)
+		$KnockbackComponent.set_collision_mask_value(1, false)
+		$KnockbackComponent.set_collision_mask_value(4, false)
+		
+		$HitboxComponent.set_collision_layer_value(1, false)
+		$HitboxComponent.set_collision_layer_value(4, true)
+		$HitboxComponent.set_collision_mask_value(1, false)
+		$HitboxComponent.set_collision_mask_value(4, false)
+		
 		$BounceComponent/Toggleable.disable()
 		$Sprite.frame = 0

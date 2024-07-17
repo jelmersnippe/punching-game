@@ -31,20 +31,20 @@ var default_cue_position: Vector2
 			_reset_hands()
 
 func _reset_hands():
-	$RotationPoint/Cue/CollisionShape2D.disabled = true
-	$RotationPoint/KnockbackComponent/CollisionShape2D.disabled = true
+	$RotationPoint/Cue/CollisionShape2D.set_deferred("disabled", true)
+	$RotationPoint/KnockbackComponent/CollisionShape2D.set_deferred("disabled", true)
 	
-	$HurtboxComponent/CollisionShape2D.disabled = false
-	$KnockableComponent/CollisionShape2D.disabled = false
+	$HurtboxComponent/CollisionShape2D.set_deferred("disabled", false)
+	$KnockableComponent/CollisionShape2D.set_deferred("disabled", false)
 	
 	$RotationPoint/Cue.position = default_cue_position
 
 func _set_release_hands():
-	$RotationPoint/Cue/CollisionShape2D.disabled = false
-	$RotationPoint/KnockbackComponent/CollisionShape2D.disabled = false
+	$RotationPoint/Cue/CollisionShape2D.set_deferred("disabled", false)
+	$RotationPoint/KnockbackComponent/CollisionShape2D.set_deferred("disabled", false)
 	
-	$HurtboxComponent/CollisionShape2D.disabled = true
-	$KnockableComponent/CollisionShape2D.disabled = true
+	$HurtboxComponent/CollisionShape2D.set_deferred("disabled", true)
+	$KnockableComponent/CollisionShape2D.set_deferred("disabled", true)
 	
 	$RotationPoint/Cue.position = default_cue_position + Vector2(5,0)
 

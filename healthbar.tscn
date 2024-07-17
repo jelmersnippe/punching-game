@@ -8,7 +8,7 @@ bg_color = Color(0.94801, 0.402801, 0.334662, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_duhev"]
 bg_color = Color(0.193928, 0.702092, 0.469351, 1)
 
-[node name="Healthbar" type="ProgressBar" node_paths=PackedStringArray("label")]
+[node name="Healthbar" type="ProgressBar"]
 offset_right = 135.0
 offset_bottom = 27.0
 theme_override_styles/background = SubResource("StyleBoxFlat_xf7do")
@@ -18,4 +18,3 @@ step = 1.0
 value = 5.0
 show_percentage = false
 script = ExtResource("1_u0xhj")
-label = NodePath("")

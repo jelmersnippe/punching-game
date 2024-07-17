@@ -8,8 +8,9 @@
 
 [node name="TestLevel" type="Node2D"]
 
-[node name="PlayerCamera" parent="." instance=ExtResource("1_1u303")]
+[node name="PlayerCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("1_1u303")]
 position = Vector2(785, 456)
+target = NodePath("../Player")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("2_w2vca")
@@ -23,9 +24,12 @@ position = Vector2(565, 420)
 
 [node name="Enemy" parent="." instance=ExtResource("5_2pd8k")]
 position = Vector2(626, 522)
+speed = 0
 
 [node name="Enemy2" parent="." instance=ExtResource("5_2pd8k")]
 position = Vector2(477, 515)
+speed = 0
 
 [node name="Enemy3" parent="." instance=ExtResource("5_2pd8k")]
 position = Vector2(545, 576)
+speed = 0

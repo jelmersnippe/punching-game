@@ -1,6 +1,6 @@
 extends Camera2D
 
-var target: Node2D
+@export var target: Node2D
 
 @export var max_offset = 100
 @export var smoothing = 5
