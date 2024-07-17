@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://hbd7myjyq1it"]
+[gd_scene load_steps=29 format=3 uid="uid://hbd7myjyq1it"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_3joco"]
 [ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="2_inqga"]
@@ -16,6 +16,8 @@
 [ext_resource type="Script" path="res://bounce_component.gd" id="14_sbb0t"]
 [ext_resource type="Script" path="res://toggleable.gd" id="15_2ullq"]
 [ext_resource type="Script" path="res://movement_component.gd" id="16_5j5ae"]
+[ext_resource type="Script" path="res://attacks/ranged_attack.gd" id="17_welwn"]
+[ext_resource type="PackedScene" uid="uid://dumdlgl3hv18u" path="res://enemy/projectile.tscn" id="18_j37ne"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(4, 10)
@@ -24,6 +26,9 @@ size = Vector2(4, 10)
 resource_local_to_scene = true
 shader = ExtResource("3_dp03a")
 shader_parameter/active = false
+shader_parameter/r = 1.0
+shader_parameter/g = 1.0
+shader_parameter/b = 1.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hthlf"]
 animations = [{
@@ -65,7 +70,7 @@ size = Vector2(5, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hk3ai"]
 size = Vector2(12, 18)
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("velocity_component", "knockable_component")]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("velocity_component", "knockable_component", "attack")]
 collision_layer = 8
 collision_mask = 10
 motion_mode = 1
@@ -74,8 +79,11 @@ script = ExtResource("1_3joco")
 velocity_component = NodePath("VelocityComponent")
 knockable_component = NodePath("KnockableComponent")
 hit_sound = ExtResource("2_inqga")
-wander_range = Vector2(60, 60)
-detection_range = 200.0
+wander_range = Vector2(40, 40)
+detection_range = 300.0
+attack = NodePath("RangedAttack")
+wander_idle_time_min = 3.0
+wander_idle_time_max = 10.0
 
 [node name="MovementCollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1)
@@ -226,6 +234,13 @@ script = ExtResource("15_2ullq")
 script = ExtResource("16_5j5ae")
 body = NodePath("..")
 velocity_component = NodePath("../VelocityComponent")
+
+[node name="RangedAttack" type="Node2D" parent="." node_paths=PackedStringArray("spawn_point")]
+script = ExtResource("17_welwn")
+projectile_scene = ExtResource("18_j37ne")
+spawn_point = NodePath("..")
+cooldown = 2.0
+prefered_distance = 150.0
 
 [connection signal="body_entered" from="DetectionRange" to="." method="_on_detection_range_body_entered"]
 [connection signal="body_exited" from="DetectionRange" to="." method="_on_detection_range_body_exited"]

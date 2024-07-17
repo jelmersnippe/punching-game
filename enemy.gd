@@ -16,6 +16,7 @@ class_name Enemy
 
 var current_state: State = State.WANDERING:
 	set(value):
+		print(get_name() + " changed to state " + State.keys()[value])
 		current_state = value
 		$Label.text = State.keys()[value]
 		
@@ -121,8 +122,8 @@ func _follow_behavior():
 	if attack != null and global_position.distance_to(target.global_position) <= attack.prefered_distance:
 		velocity_component.velocity = Vector2.ZERO
 		if attack.can_attack:
-			attack.execute(target)
 			current_state = State.ATTACKING
+			attack.execute(target)
 		return
 	
 	$NavigationAgent2D.target_position = target.position

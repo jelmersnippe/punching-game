@@ -16,7 +16,7 @@
 [ext_resource type="Script" path="res://bounce_component.gd" id="14_ycppl"]
 [ext_resource type="Script" path="res://toggleable.gd" id="15_lke64"]
 [ext_resource type="Script" path="res://movement_component.gd" id="16_hjt2w"]
-[ext_resource type="Script" path="res://charge_attack.gd" id="17_5a5n1"]
+[ext_resource type="Script" path="res://attacks/charge_attack.gd" id="17_l3cwc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(4, 10)
@@ -233,7 +233,7 @@ body = NodePath("..")
 velocity_component = NodePath("../VelocityComponent")
 
 [node name="ChargeAttack" type="Node2D" parent="." node_paths=PackedStringArray("velocity_component", "flash_component")]
-script = ExtResource("17_5a5n1")
+script = ExtResource("17_l3cwc")
 velocity_component = NodePath("../VelocityComponent")
 flash_component = NodePath("../ChargeFlash")
 distance = 120.0

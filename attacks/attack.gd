@@ -7,8 +7,12 @@ signal attack_completed()
 @export var cooldown: float = 5
 @export var prefered_distance: float = 15
 
-var can_attack: bool = true
+var can_attack: bool = false
 var attacking: bool = false
+
+func _ready():
+	var timer = get_tree().create_timer(cooldown)
+	timer.timeout.connect(_finish_cooldown)
 
 func execute(_target: Node2D):
 	if not can_attack:
@@ -24,6 +28,7 @@ func cancel():
 	pass
 		
 func _complete_attack():
+	can_attack = false
 	attacking = false
 	attack_completed.emit()
 	
@@ -31,5 +36,6 @@ func _complete_attack():
 	timer.timeout.connect(_finish_cooldown)
 	
 func _finish_cooldown():
+	print("cooldown finished for " + get_name())
 	can_attack = true
 	cooldown_ready.emit()
