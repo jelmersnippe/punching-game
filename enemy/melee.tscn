@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bnol5so1ev2tb"]
+[gd_scene load_steps=27 format=3 uid="uid://b37ubjqvxnjup"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_x5ucr"]
 [ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="2_d4ehm"]

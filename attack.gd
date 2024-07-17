@@ -17,16 +17,13 @@ func execute(_target: Node2D):
 	pass
 	
 func cancel():
-	print("attack cancelled")
 	if not attacking:
 		return
 		
-	print("attack cancelled")
 	_complete_attack()
 	pass
 		
 func _complete_attack():
-	print("attack completed")
 	attacking = false
 	attack_completed.emit()
 	

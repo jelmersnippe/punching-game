@@ -3,7 +3,7 @@ extends Node2D
 signal player_spawned(player: Node2D)
 
 var player_scene = preload("res://player.tscn")
-var enemy_scene = preload("res://enemy/enemy.tscn")
+var enemy_scene = preload("res://enemy/charger.tscn")
 
 @export var enemy_spawn_count: int = 10
 

@@ -1,29 +1,29 @@
-[gd_scene load_steps=28 format=3 uid="uid://c444r884rkxd1"]
+[gd_scene load_steps=28 format=3 uid="uid://bam16b5ketuyq"]
 
-[ext_resource type="Script" path="res://enemy.gd" id="1_tryha"]
-[ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="2_yy6d8"]
-[ext_resource type="Shader" path="res://hit_flash.gdshader" id="4_j4xyo"]
-[ext_resource type="Texture2D" uid="uid://cwlij5qwegpty" path="res://sprites/enemy.png" id="5_2n2nx"]
-[ext_resource type="Texture2D" uid="uid://7mkrlcjkgxkk" path="res://sprites/enemy_hit.png" id="6_sxkp8"]
-[ext_resource type="Script" path="res://hitbox_component.gd" id="7_q3sun"]
-[ext_resource type="Script" path="res://knockback_component.gd" id="8_f7j7w"]
-[ext_resource type="Script" path="res://hurtbox_component.gd" id="9_emsly"]
-[ext_resource type="Script" path="res://health_component.gd" id="10_d1cll"]
-[ext_resource type="Script" path="res://knockable_component.gd" id="11_6vqyr"]
-[ext_resource type="Script" path="res://velocity_component.gd" id="12_qpw4g"]
-[ext_resource type="Script" path="res://hit_flash_component.gd" id="13_d42tb"]
-[ext_resource type="PackedScene" uid="uid://b8fgwm6nhyjfc" path="res://healthbar.tscn" id="14_mmpby"]
-[ext_resource type="Script" path="res://bounce_component.gd" id="15_cxnvl"]
-[ext_resource type="Script" path="res://toggleable.gd" id="16_fatmc"]
-[ext_resource type="Script" path="res://movement_component.gd" id="17_b573e"]
-[ext_resource type="Script" path="res://charge_attack.gd" id="17_byaf7"]
+[ext_resource type="Script" path="res://enemy.gd" id="1_co0jp"]
+[ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="2_mirwg"]
+[ext_resource type="Shader" path="res://hit_flash.gdshader" id="3_2ql1n"]
+[ext_resource type="Texture2D" uid="uid://cwlij5qwegpty" path="res://sprites/enemy.png" id="4_61vqb"]
+[ext_resource type="Texture2D" uid="uid://7mkrlcjkgxkk" path="res://sprites/enemy_hit.png" id="5_h5hms"]
+[ext_resource type="Script" path="res://hitbox_component.gd" id="6_36k1e"]
+[ext_resource type="Script" path="res://knockback_component.gd" id="7_to1c5"]
+[ext_resource type="Script" path="res://hurtbox_component.gd" id="8_ks3td"]
+[ext_resource type="Script" path="res://health_component.gd" id="9_uqrl4"]
+[ext_resource type="Script" path="res://knockable_component.gd" id="10_dqoul"]
+[ext_resource type="Script" path="res://velocity_component.gd" id="11_amf7t"]
+[ext_resource type="Script" path="res://hit_flash_component.gd" id="12_a2udq"]
+[ext_resource type="PackedScene" uid="uid://b8fgwm6nhyjfc" path="res://healthbar.tscn" id="13_qkgq8"]
+[ext_resource type="Script" path="res://bounce_component.gd" id="14_ycppl"]
+[ext_resource type="Script" path="res://toggleable.gd" id="15_lke64"]
+[ext_resource type="Script" path="res://movement_component.gd" id="16_hjt2w"]
+[ext_resource type="Script" path="res://charge_attack.gd" id="17_5a5n1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(4, 10)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h34eh"]
 resource_local_to_scene = true
-shader = ExtResource("4_j4xyo")
+shader = ExtResource("3_2ql1n")
 shader_parameter/active = false
 shader_parameter/r = 1.0
 shader_parameter/g = 1.0
@@ -33,10 +33,10 @@ shader_parameter/b = 1.0
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("5_2n2nx")
+"texture": ExtResource("4_61vqb")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_sxkp8")
+"texture": ExtResource("5_h5hms")
 }],
 "loop": true,
 "name": &"default",
@@ -74,10 +74,10 @@ collision_layer = 8
 collision_mask = 10
 motion_mode = 1
 wall_min_slide_angle = 0.0
-script = ExtResource("1_tryha")
+script = ExtResource("1_co0jp")
 velocity_component = NodePath("VelocityComponent")
 knockable_component = NodePath("KnockableComponent")
-hit_sound = ExtResource("2_yy6d8")
+hit_sound = ExtResource("2_mirwg")
 wander_range = Vector2(60, 60)
 detection_range = 200.0
 attack = NodePath("ChargeAttack")
@@ -167,7 +167,7 @@ vertical_alignment = 1
 
 [node name="HitboxComponent" type="Area2D" parent="."]
 collision_layer = 8
-script = ExtResource("7_q3sun")
+script = ExtResource("6_36k1e")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 position = Vector2(0.5, 1)
@@ -175,7 +175,7 @@ shape = SubResource("RectangleShape2D_pdin5")
 
 [node name="KnockbackComponent" type="Area2D" parent="."]
 collision_layer = 8
-script = ExtResource("8_f7j7w")
+script = ExtResource("7_to1c5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockbackComponent"]
 position = Vector2(0.5, 1)
@@ -183,9 +183,9 @@ shape = SubResource("RectangleShape2D_pdin5")
 
 [node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component", "hit_particles")]
 collision_layer = 8
-script = ExtResource("9_emsly")
+script = ExtResource("8_ks3td")
 health_component = NodePath("../HealthComponent")
-hit_sound = ExtResource("2_yy6d8")
+hit_sound = ExtResource("2_mirwg")
 hit_particles = NodePath("../HitParticles")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
@@ -193,11 +193,11 @@ position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_hk3ai")
 
 [node name="HealthComponent" type="Node" parent="."]
-script = ExtResource("10_d1cll")
+script = ExtResource("9_uqrl4")
 
 [node name="KnockableComponent" type="Area2D" parent="." node_paths=PackedStringArray("velocity_component")]
 collision_layer = 8
-script = ExtResource("11_6vqyr")
+script = ExtResource("10_dqoul")
 velocity_component = NodePath("../VelocityComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
@@ -205,13 +205,13 @@ position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_hk3ai")
 
 [node name="VelocityComponent" type="Node" parent="."]
-script = ExtResource("12_qpw4g")
+script = ExtResource("11_amf7t")
 
 [node name="HitFlashComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
-script = ExtResource("13_d42tb")
+script = ExtResource("12_a2udq")
 sprite = NodePath("../Sprite")
 
-[node name="Healthbar" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("14_mmpby")]
+[node name="Healthbar" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("13_qkgq8")]
 offset_left = -12.0
 offset_top = -16.0
 offset_right = 13.0
@@ -219,28 +219,28 @@ offset_bottom = -11.0
 health_component = NodePath("../HealthComponent")
 
 [node name="BounceComponent" type="Node2D" parent="." node_paths=PackedStringArray("velocity_component", "movement_component")]
-script = ExtResource("15_cxnvl")
+script = ExtResource("14_ycppl")
 velocity_component = NodePath("../VelocityComponent")
 movement_component = NodePath("../MovementComponent")
 velocity_decrease_on_bounce = 40.0
 
 [node name="Toggleable" type="Node" parent="BounceComponent"]
-script = ExtResource("16_fatmc")
+script = ExtResource("15_lke64")
 
 [node name="MovementComponent" type="Node" parent="." node_paths=PackedStringArray("body", "velocity_component")]
-script = ExtResource("17_b573e")
+script = ExtResource("16_hjt2w")
 body = NodePath("..")
 velocity_component = NodePath("../VelocityComponent")
 
 [node name="ChargeAttack" type="Node2D" parent="." node_paths=PackedStringArray("velocity_component", "flash_component")]
-script = ExtResource("17_byaf7")
+script = ExtResource("17_5a5n1")
 velocity_component = NodePath("../VelocityComponent")
 flash_component = NodePath("../ChargeFlash")
 distance = 120.0
 prefered_distance = 40.0
 
 [node name="ChargeFlash" type="Node" parent="." node_paths=PackedStringArray("sprite")]
-script = ExtResource("13_d42tb")
+script = ExtResource("12_a2udq")
 flash_time = 0.2
 color = Color(1, 0, 0, 1)
 sprite = NodePath("../Sprite")
