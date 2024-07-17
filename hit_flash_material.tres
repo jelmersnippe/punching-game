@@ -5,3 +5,6 @@
 [resource]
 shader = ExtResource("1_wmnxv")
 shader_parameter/active = false
+shader_parameter/r = 1.0
+shader_parameter/g = 1.0
+shader_parameter/b = 1.0

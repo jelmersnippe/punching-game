@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="1_u1ux5"]
 [ext_resource type="TileSet" uid="uid://b6n5fjkbmrfjh" path="res://arena.tres" id="2_r6maj"]
 [ext_resource type="PackedScene" uid="uid://dpukfjaytn7gw" path="res://player_camera.tscn" id="3_6ehnw"]
-[ext_resource type="PackedScene" uid="uid://c444r884rkxd1" path="res://enemy.tscn" id="4_8ackk"]
+[ext_resource type="PackedScene" uid="uid://c444r884rkxd1" path="res://enemy/enemy.tscn" id="4_8ackk"]
 
 [node name="TestArena" type="Node2D"]
 

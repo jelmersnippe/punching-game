@@ -4,7 +4,7 @@
 [ext_resource type="TileSet" uid="uid://b6n5fjkbmrfjh" path="res://arena.tres" id="2_w2vca"]
 [ext_resource type="PackedScene" uid="uid://desk13aq7n5bm" path="res://ui.tscn" id="3_6ocv4"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="4_y4yqw"]
-[ext_resource type="PackedScene" uid="uid://c444r884rkxd1" path="res://enemy.tscn" id="5_2pd8k"]
+[ext_resource type="PackedScene" uid="uid://c444r884rkxd1" path="res://enemy/enemy.tscn" id="5_2pd8k"]
 
 [node name="TestLevel" type="Node2D"]
 

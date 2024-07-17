@@ -5,7 +5,7 @@ signal on_knocked_changed(is_knocked: bool)
 
 @export var velocity_component: VelocityComponent
 
-@export var knockback_recovery_speed: float = 5
+@export var mass: float = 1
 @export var knockback_velocity_distance_deadzone: float = 5
 
 var knocked_grace_time = 0.1
@@ -18,11 +18,11 @@ var can_be_knocked = true
 func _ready():
 	area_entered.connect(_on_area_entered)
 	
-func _process(delta):
+func _process(_delta):
 	if not is_knocked:
 		return
 	
-	velocity_component.velocity -= velocity_component.velocity.normalized() * knockback_recovery_speed
+	velocity_component.velocity -= velocity_component.velocity.normalized() * mass * 5
 	
 	if velocity_component.velocity.length() < knockback_velocity_distance_deadzone:
 		is_knocked = false
@@ -44,4 +44,4 @@ func _on_area_entered(area):
 		return
 		
 	var knockback_component = area as KnockbackComponent
-	knockback(area.global_position.direction_to(global_position), knockback_component.knockback_force)
+	knockback(area.global_position.direction_to(global_position), knockback_component.knockback_force / mass)

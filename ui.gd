@@ -19,7 +19,7 @@ func _disabled_screenflash():
 	var shader_material = $ScreenFlash.material as ShaderMaterial
 	shader_material.set_shader_parameter("intensity", 0)
 
-func screen_flash_on_damage(health_change: int, current_health: int, _max_health: int):
+func screen_flash_on_damage(health_change: int, _current_health: int, _max_health: int):
 	if health_change < 0:
 		screen_flash(0.8, 0.1)
 

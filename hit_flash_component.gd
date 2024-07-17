@@ -4,12 +4,17 @@ class_name HitFlashComponent
 var hitflash_material_resource = preload("res://hit_flash_material.tres")
 
 @export var flash_time: float = 0.1
+@export var color: Color = Color.WHITE
 @export var sprite: CanvasItem
 var instantiated_hitflash_material: ShaderMaterial
 
 func _ready():
 	instantiated_hitflash_material = hitflash_material_resource.duplicate()
 	sprite.material = instantiated_hitflash_material
+	
+	instantiated_hitflash_material.set_shader_parameter("r", color.r)
+	instantiated_hitflash_material.set_shader_parameter("g", color.g)
+	instantiated_hitflash_material.set_shader_parameter("b", color.b)
 
 func flash() -> void:
 	_set_flash(true)

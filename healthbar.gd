@@ -10,7 +10,7 @@ class_name Healthbar
 			
 @export var label: Label
 
-func set_health(health_change: int, current_health: int, max_health: int):
+func set_health(_health_change: int, current_health: int, max_health: int):
 	max_value = max_health
 	value = current_health
 	
