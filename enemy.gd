@@ -1,11 +1,16 @@
 extends CharacterBody2D
 class_name Enemy
 
+@export var health_component: HealthComponent
+@export var hurtbox_component: HurtboxComponent
 @export var velocity_component: VelocityComponent
-
 @export var knockable_component: KnockableComponent
+@export var particle_player: ParticlePlayer
 
 @export var hit_sound: AudioStream
+
+@export var hit_particles: PackedScene = preload("res://enemy/hit_particles.tscn")
+@export var death_particles: PackedScene = preload("res://enemy/death_particles.tscn")
 
 @export var speed = 50
 
@@ -40,6 +45,9 @@ func _ready():
 	detection_shape.radius = detection_range
 	$DetectionRange/CollisionShape2D.shape = detection_shape
 	$BounceComponent/Toggleable.disable()
+	
+	health_component.died.connect(func(): particle_player.play_particle(death_particles, global_position))
+	hurtbox_component.hit_from.connect(func(direction): particle_player.play_particle(death_particles, global_position, -direction))
 	
 	if attack != null:
 		attack.attack_completed.connect(func(): current_state = State.FOLLOWING)

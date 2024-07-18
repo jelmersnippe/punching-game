@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://6up7ldcoxr4e"]
+
+[ext_resource type="Script" path="res://particle_player.gd" id="1_fga1t"]
+
+[node name="ParticlePlayer" type="Node"]
+script = ExtResource("1_fga1t")

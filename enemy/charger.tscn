@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bam16b5ketuyq"]
+[gd_scene load_steps=29 format=3 uid="uid://bam16b5ketuyq"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_co0jp"]
 [ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="2_mirwg"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://toggleable.gd" id="15_lke64"]
 [ext_resource type="Script" path="res://movement_component.gd" id="16_hjt2w"]
 [ext_resource type="Script" path="res://attacks/charge_attack.gd" id="17_l3cwc"]
+[ext_resource type="Script" path="res://particle_player.gd" id="18_s6b1h"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
 size = Vector2(4, 10)
@@ -69,14 +70,17 @@ size = Vector2(5, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hk3ai"]
 size = Vector2(12, 18)
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("velocity_component", "knockable_component", "attack")]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("health_component", "hurtbox_component", "velocity_component", "knockable_component", "particle_player", "attack")]
 collision_layer = 8
 collision_mask = 10
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_co0jp")
+health_component = NodePath("HealthComponent")
+hurtbox_component = NodePath("HurtboxComponent")
 velocity_component = NodePath("VelocityComponent")
 knockable_component = NodePath("KnockableComponent")
+particle_player = NodePath("ParticlePlayer")
 hit_sound = ExtResource("2_mirwg")
 wander_range = Vector2(60, 60)
 detection_range = 200.0
@@ -181,12 +185,10 @@ script = ExtResource("7_to1c5")
 position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_pdin5")
 
-[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component", "hit_particles")]
+[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
 collision_layer = 8
 script = ExtResource("8_ks3td")
 health_component = NodePath("../HealthComponent")
-hit_sound = ExtResource("2_mirwg")
-hit_particles = NodePath("../HitParticles")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, 1)
@@ -244,6 +246,9 @@ script = ExtResource("12_a2udq")
 flash_time = 0.2
 color = Color(1, 0, 0, 1)
 sprite = NodePath("../Sprite")
+
+[node name="ParticlePlayer" type="Node" parent="."]
+script = ExtResource("18_s6b1h")
 
 [connection signal="body_entered" from="DetectionRange" to="." method="_on_detection_range_body_entered"]
 [connection signal="body_exited" from="DetectionRange" to="." method="_on_detection_range_body_exited"]
