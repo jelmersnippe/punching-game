@@ -1,19 +1,19 @@
-[gd_scene load_steps=31 format=3 uid="uid://diye237awnyll"]
+[gd_scene load_steps=26 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
 [ext_resource type="AudioStream" uid="uid://b06ogbyftj1hs" path="res://sounds/punch.wav" id="2_ucn14"]
 [ext_resource type="AudioStream" uid="uid://c5pwpfy6yosoc" path="res://sounds/charging-machine-90403.mp3" id="3_sqgcf"]
 [ext_resource type="Material" uid="uid://c5kakjx6hscw" path="res://hit_flash_material.tres" id="4_31d0y"]
 [ext_resource type="Texture2D" uid="uid://cxogbwb7e75n4" path="res://sprites/AnimationSheet.png" id="4_butkp"]
-[ext_resource type="PackedScene" uid="uid://3dqeis62tj7i" path="res://health_component.tscn" id="7_7xi7d"]
+[ext_resource type="PackedScene" path="res://health_component.tscn" id="7_7xi7d"]
 [ext_resource type="Texture2D" uid="uid://b337kfwbwphru" path="res://sprites/cue.png" id="7_r5r06"]
 [ext_resource type="Script" path="res://knockback_component.gd" id="8_5w3uk"]
-[ext_resource type="PackedScene" uid="uid://bqyn4sh5fnp4e" path="res://hurtbox_component.tscn" id="8_qqism"]
+[ext_resource type="PackedScene" path="res://hurtbox_component.tscn" id="8_qqism"]
 [ext_resource type="Script" path="res://velocity_component.gd" id="9_ej2s8"]
 [ext_resource type="Script" path="res://hitbox_component.gd" id="9_gmd1v"]
-[ext_resource type="PackedScene" uid="uid://r7beqteaan1l" path="res://hit_flash_component.tscn" id="10_xt5ej"]
-[ext_resource type="PackedScene" uid="uid://cxqa47rbftsf4" path="res://knockable_component.tscn" id="11_rwtmh"]
-[ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="12_h8uy1"]
+[ext_resource type="PackedScene" path="res://hit_flash_component.tscn" id="10_xt5ej"]
+[ext_resource type="PackedScene" path="res://knockable_component.tscn" id="11_rwtmh"]
+[ext_resource type="Script" path="res://particle_player.gd" id="14_ytqld"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx2q4"]
 atlas = ExtResource("4_butkp")
@@ -85,42 +85,22 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e7ngg"]
 size = Vector2(5, 14)
 
-[sub_resource type="Curve" id="Curve_cafhw"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.461783), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_5c0da"]
-max_value = 100.0
-_data = [Vector2(0.0159744, 18.8535), 0.0, 0.0, 0, 0, Vector2(1, 56.9427), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_jg7v3"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.990415, 0.271338), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_aym2s"]
-max_value = 100.0
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.99361, 15.5414), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_spmb2"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.99361, 0.34586), 0.0, 0.0, 0, 0]
-point_count = 2
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j56pb"]
 size = Vector2(24, 4)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x74aa"]
 size = Vector2(5, 14)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_component", "knockable_component", "velocity_component")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_component", "hurtbox_component", "knockable_component", "velocity_component", "particle_player")]
 position = Vector2(107, 218)
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_4gvax")
 health_component = NodePath("HealthComponent")
+hurtbox_component = NodePath("HurtboxComponent")
 knockable_component = NodePath("KnockableComponent")
 velocity_component = NodePath("VelocityComponent")
+particle_player = NodePath("ParticlePlayer")
 punch_sound = ExtResource("2_ucn14")
 charge_sound = ExtResource("3_sqgcf")
 SPEED = 170.0
@@ -136,58 +116,6 @@ frame_progress = 0.616457
 [node name="MovementCollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_e7ngg")
-
-[node name="TrailingParticles" type="CPUParticles2D" parent="."]
-z_index = -1
-position = Vector2(-1, 2)
-emitting = false
-amount = 30
-lifetime = 0.2
-emission_shape = 1
-emission_sphere_radius = 4.0
-spread = 42.83
-gravity = Vector2(0, 0)
-scale_amount_min = 4.0
-scale_amount_max = 6.0
-scale_amount_curve = SubResource("Curve_cafhw")
-
-[node name="HitParticles" type="CPUParticles2D" parent="."]
-emitting = false
-lifetime = 0.5
-one_shot = true
-explosiveness = 1.0
-randomness = 1.0
-direction = Vector2(-1, 0)
-spread = 30.0
-gravity = Vector2(0, 100)
-initial_velocity_min = 50.0
-initial_velocity_max = 130.0
-damping_min = 2.0
-damping_max = 8.0
-damping_curve = SubResource("Curve_5c0da")
-scale_amount_min = 0.5
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_jg7v3")
-color = Color(1, 0.117647, 0.235294, 1)
-
-[node name="DeathParticles" type="CPUParticles2D" parent="."]
-emitting = false
-amount = 18
-lifetime = 0.3
-one_shot = true
-explosiveness = 1.0
-randomness = 1.0
-direction = Vector2(0, 0)
-spread = 180.0
-gravity = Vector2(0, 0)
-initial_velocity_min = 70.0
-initial_velocity_max = 100.0
-damping_max = 50.0
-damping_curve = SubResource("Curve_aym2s")
-scale_amount_min = 2.0
-scale_amount_max = 4.0
-scale_amount_curve = SubResource("Curve_spmb2")
-color = Color(1, 0.117647, 0.235294, 1)
 
 [node name="RotationPoint" type="Node2D" parent="."]
 z_as_relative = false
@@ -223,11 +151,9 @@ texture = ExtResource("7_r5r06")
 [node name="VelocityComponent" type="Node" parent="."]
 script = ExtResource("9_ej2s8")
 
-[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component", "hit_particles") instance=ExtResource("8_qqism")]
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("8_qqism")]
 collision_mask = 8
 health_component = NodePath("../HealthComponent")
-hit_sound = ExtResource("12_h8uy1")
-hit_particles = NodePath("../HitParticles")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
 position = Vector2(0, 1)
@@ -236,7 +162,6 @@ shape = SubResource("RectangleShape2D_x74aa")
 [node name="KnockableComponent" parent="." node_paths=PackedStringArray("velocity_component") instance=ExtResource("11_rwtmh")]
 collision_mask = 8
 velocity_component = NodePath("../VelocityComponent")
-knockback_recovery_speed = 50.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
 position = Vector2(0, 1)
@@ -244,6 +169,9 @@ shape = SubResource("RectangleShape2D_x74aa")
 
 [node name="HitFlashComponent" parent="." node_paths=PackedStringArray("sprite") instance=ExtResource("10_xt5ej")]
 sprite = NodePath("../Sprite")
+
+[node name="ParticlePlayer" type="Node" parent="."]
+script = ExtResource("14_ytqld")
 
 [connection signal="hit" from="HurtboxComponent" to="HitFlashComponent" method="flash"]
 [connection signal="on_knocked_changed" from="KnockableComponent" to="." method="_on_knockable_component_on_knocked_changed"]

@@ -2,8 +2,16 @@ extends CharacterBody2D
 class_name Player
 
 @export var health_component: HealthComponent
+@export var hurtbox_component: HurtboxComponent
 @export var knockable_component: KnockableComponent
 @export var velocity_component: VelocityComponent
+@export var particle_player: ParticlePlayer
+
+@export var trailing_particles = preload("res://trailing_particles.tscn")
+@export var hit_particles: PackedScene = preload("res://enemy/hit_particles.tscn")
+@export var death_particles: PackedScene = preload("res://enemy/death_particles.tscn")
+
+var active_particles: CPUParticles2D
 
 @export var punch_sound: AudioStream
 @export var charge_sound: AudioStream
@@ -22,8 +30,8 @@ var remaining_charge_cooldown = 0
 
 var default_cue_position: Vector2
 
-@export var current_charge: float = 0
-@export var remaining_punch_time: float = 0:
+var current_charge: float = 0
+var remaining_punch_time: float = 0:
 	set(value):
 		remaining_punch_time = value
 		$RotationPoint/KnockbackComponent.knockback_force = (remaining_punch_time / PUNCH_TIME) * MAX_CHARGE
@@ -79,7 +87,7 @@ func _physics_process(delta):
 		remaining_punch_time -= delta
 		if remaining_punch_time <= 0:
 			velocity_component.velocity /= 4
-			$TrailingParticles.emitting = false
+			particle_player.stop_playing(active_particles)
 	if remaining_charge_cooldown > 0:
 		remaining_charge_cooldown -= delta
 			
@@ -139,11 +147,15 @@ func _release_charge():
 	velocity_component.velocity = direction * MAX_CHARGE
 	
 	_set_release_hands()
-	$TrailingParticles.emitting = true
+	active_particles = particle_player.play_repeating_particle(trailing_particles)
+	active_particles.direction = -direction
+	add_child(active_particles)
 	queue_redraw()
 	
 func _ready():
 	default_cue_position = $RotationPoint/Cue.position
+	health_component.died.connect(func(): particle_player.play_particle(death_particles, global_position))
+	hurtbox_component.hit_from.connect(func(direction): particle_player.play_particle(death_particles, global_position, -direction))
 	
 func _cancel_charge():
 	remaining_charge_cooldown = charge_cooldown

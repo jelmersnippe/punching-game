@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://cv8mc5jqnv18i"]
+
+[sub_resource type="Curve" id="Curve_cafhw"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.461783), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="TrailingParticles" type="CPUParticles2D"]
+z_index = -1
+position = Vector2(-1, 2)
+emitting = false
+amount = 30
+lifetime = 0.2
+emission_shape = 1
+emission_sphere_radius = 4.0
+spread = 42.83
+gravity = Vector2(0, 0)
+scale_amount_min = 4.0
+scale_amount_max = 6.0
+scale_amount_curve = SubResource("Curve_cafhw")
