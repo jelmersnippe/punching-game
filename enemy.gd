@@ -5,7 +5,9 @@ class_name Enemy
 @export var hurtbox_component: HurtboxComponent
 @export var velocity_component: VelocityComponent
 @export var knockable_component: KnockableComponent
+
 @export var particle_player: ParticlePlayer
+@export var sound_player: SoundPlayer
 
 @export var hit_sound: AudioStream
 
@@ -48,6 +50,7 @@ func _ready():
 	
 	health_component.died.connect(func(): particle_player.play_particle(death_particles, global_position))
 	hurtbox_component.hit_from.connect(func(direction): particle_player.play_particle(death_particles, global_position, -direction))
+	hurtbox_component.hit_from.connect(func(direction): sound_player.play_sound(hit_sound, 0))
 	
 	if attack != null:
 		attack.attack_completed.connect(func(): current_state = State.FOLLOWING)

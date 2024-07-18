@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://diye237awnyll"]
+[gd_scene load_steps=28 format=3 uid="uid://diye237awnyll"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_4gvax"]
 [ext_resource type="AudioStream" uid="uid://b06ogbyftj1hs" path="res://sounds/punch.wav" id="2_ucn14"]
@@ -13,7 +13,9 @@
 [ext_resource type="Script" path="res://hitbox_component.gd" id="9_gmd1v"]
 [ext_resource type="PackedScene" path="res://hit_flash_component.tscn" id="10_xt5ej"]
 [ext_resource type="PackedScene" path="res://knockable_component.tscn" id="11_rwtmh"]
+[ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="12_h8uy1"]
 [ext_resource type="Script" path="res://particle_player.gd" id="14_ytqld"]
+[ext_resource type="Script" path="res://sound_player.gd" id="15_mv1vs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xx2q4"]
 atlas = ExtResource("4_butkp")
@@ -91,7 +93,7 @@ size = Vector2(24, 4)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x74aa"]
 size = Vector2(5, 14)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_component", "hurtbox_component", "knockable_component", "velocity_component", "particle_player")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_component", "hurtbox_component", "knockable_component", "velocity_component", "particle_player", "sound_player")]
 position = Vector2(107, 218)
 collision_mask = 2
 motion_mode = 1
@@ -101,8 +103,10 @@ hurtbox_component = NodePath("HurtboxComponent")
 knockable_component = NodePath("KnockableComponent")
 velocity_component = NodePath("VelocityComponent")
 particle_player = NodePath("ParticlePlayer")
+sound_player = NodePath("SoundPlayer")
 punch_sound = ExtResource("2_ucn14")
 charge_sound = ExtResource("3_sqgcf")
+hit_sound = ExtResource("12_h8uy1")
 SPEED = 170.0
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
@@ -172,6 +176,9 @@ sprite = NodePath("../Sprite")
 
 [node name="ParticlePlayer" type="Node" parent="."]
 script = ExtResource("14_ytqld")
+
+[node name="SoundPlayer" type="Node" parent="."]
+script = ExtResource("15_mv1vs")
 
 [connection signal="hit" from="HurtboxComponent" to="HitFlashComponent" method="flash"]
 [connection signal="on_knocked_changed" from="KnockableComponent" to="." method="_on_knockable_component_on_knocked_changed"]

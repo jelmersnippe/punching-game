@@ -1,6 +1,7 @@
 extends Node
+class_name SoundPlayer
 
-var pitch_randomness = 0.15
+@export var pitch_randomness = 0.15
 
 func play_sound(sound: AudioStream, volume: float) -> AudioStreamPlayer2D:
 	var player = AudioStreamPlayer2D.new()
@@ -12,5 +13,3 @@ func play_sound(sound: AudioStream, volume: float) -> AudioStreamPlayer2D:
 	player.play()
 	
 	return player
-	
-

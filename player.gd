@@ -5,7 +5,9 @@ class_name Player
 @export var hurtbox_component: HurtboxComponent
 @export var knockable_component: KnockableComponent
 @export var velocity_component: VelocityComponent
+
 @export var particle_player: ParticlePlayer
+@export var sound_player: SoundPlayer
 
 @export var trailing_particles = preload("res://trailing_particles.tscn")
 @export var hit_particles: PackedScene = preload("res://enemy/hit_particles.tscn")
@@ -15,6 +17,7 @@ var active_particles: CPUParticles2D
 
 @export var punch_sound: AudioStream
 @export var charge_sound: AudioStream
+@export var hit_sound: AudioStream
 var charge_sound_player: AudioStreamPlayer2D
 
 @export var SPEED = 300.0
@@ -108,7 +111,7 @@ func _handle_grounded(delta: float):
 		
 	if Input.is_action_pressed("charge"):
 		if current_charge <= 0 and remaining_charge_cooldown <= 0:
-			charge_sound_player = SoundManager.play_sound(charge_sound, -20)
+			charge_sound_player = sound_player.play_sound(charge_sound, -20)
 			
 		velocity_component.velocity *= CHARGE_SLOWDOWN
 		_charge(delta)
@@ -142,7 +145,7 @@ func _release_charge():
 	remaining_punch_time = (current_charge / MAX_CHARGE) * PUNCH_TIME
 	current_charge = 0
 	
-	SoundManager.play_sound(punch_sound, -10)
+	sound_player.play_sound(punch_sound, -10)
 	var direction = (get_global_mouse_position() - global_position).normalized()
 	velocity_component.velocity = direction * MAX_CHARGE
 	
@@ -156,6 +159,7 @@ func _ready():
 	default_cue_position = $RotationPoint/Cue.position
 	health_component.died.connect(func(): particle_player.play_particle(death_particles, global_position))
 	hurtbox_component.hit_from.connect(func(direction): particle_player.play_particle(death_particles, global_position, -direction))
+	hurtbox_component.hit_from.connect(func(direction): sound_player.play_sound(hit_sound, 0))
 	
 func _cancel_charge():
 	remaining_charge_cooldown = charge_cooldown
