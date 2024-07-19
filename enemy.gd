@@ -57,12 +57,19 @@ func _ready():
 		
 	$BounceComponent/Toggleable.disable()
 	
-	health_component.died.connect(func(): particle_player.play_particle(death_particles, global_position))
-	hurtbox_component.hit_from.connect(func(direction): particle_player.play_particle(death_particles, global_position, -direction))
-	hurtbox_component.hit_from.connect(func(direction): sound_player.play_sound(hit_sound, 0))
+	health_component.died.connect(_die)
+	hurtbox_component.hit_from.connect(_hit)
 	
 	if attack != null:
 		attack.attack_completed.connect(func(): current_state = State.FOLLOWING)
+		
+func _die(direction: Vector2):
+	particle_player.play_particle(death_particles, global_position)
+	$Sprite.play("Death")
+		
+func _hit(direction: Vector2):
+	particle_player.play_particle(hit_particles, global_position, -direction)
+	sound_player.play_sound(hit_sound, 0)
 
 func _process(delta):
 	if knockable_component.is_knocked:
@@ -70,16 +77,23 @@ func _process(delta):
 		
 	match current_state:
 		State.IDLE:
+			$Sprite.play("Idle")
 			return
 		State.WANDERING:
 			_wander_behavior(delta)
+			$Sprite.play("Move")
 		State.FOLLOWING:
 			_follow_behavior()
+			if velocity_component.velocity.length() > 0:
+				$Sprite.play("Move")
+			else:
+				$Sprite.play("Idle")
 		State.SEEKING:
 			_seeking_behavior()
+			$Sprite.play("Move")
 		State.ATTACKING:
 			return
-	
+		
 	if velocity_component.velocity.x > 0:
 		$Sprite.flip_h = false
 	elif velocity_component.velocity.x < 0:
@@ -175,6 +189,7 @@ func _on_detection_range_body_exited(body):
 func _on_health_component_died():
 	queue_free()
 
+var prev_animation
 func _on_knockable_component_on_knocked_changed(is_knocked):
 	if is_knocked:
 		$KnockbackComponent.set_collision_layer_value(1, true)
@@ -188,7 +203,8 @@ func _on_knockable_component_on_knocked_changed(is_knocked):
 		$HitboxComponent.set_collision_mask_value(4, true)
 		
 		$BounceComponent/Toggleable.enable()
-		$Sprite.frame = 1
+		prev_animation = $Sprite.animation
+		$Sprite.animation = "Damaged"
 		if attack != null:
 			attack.cancel()
 	else:
@@ -203,4 +219,4 @@ func _on_knockable_component_on_knocked_changed(is_knocked):
 		$HitboxComponent.set_collision_mask_value(4, false)
 		
 		$BounceComponent/Toggleable.disable()
-		$Sprite.frame = 0
+		$Sprite.play(prev_animation)

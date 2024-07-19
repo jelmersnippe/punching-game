@@ -5,14 +5,14 @@
 [ext_resource type="AudioStream" uid="uid://c5pwpfy6yosoc" path="res://sounds/charging-machine-90403.mp3" id="3_sqgcf"]
 [ext_resource type="Material" uid="uid://c5kakjx6hscw" path="res://hit_flash_material.tres" id="4_31d0y"]
 [ext_resource type="Texture2D" uid="uid://cxogbwb7e75n4" path="res://sprites/AnimationSheet.png" id="4_butkp"]
-[ext_resource type="PackedScene" path="res://health_component.tscn" id="7_7xi7d"]
+[ext_resource type="PackedScene" uid="uid://3dqeis62tj7i" path="res://health_component.tscn" id="7_7xi7d"]
 [ext_resource type="Texture2D" uid="uid://b337kfwbwphru" path="res://sprites/cue.png" id="7_r5r06"]
 [ext_resource type="Script" path="res://knockback_component.gd" id="8_5w3uk"]
-[ext_resource type="PackedScene" path="res://hurtbox_component.tscn" id="8_qqism"]
+[ext_resource type="PackedScene" uid="uid://bqyn4sh5fnp4e" path="res://hurtbox_component.tscn" id="8_qqism"]
 [ext_resource type="Script" path="res://velocity_component.gd" id="9_ej2s8"]
 [ext_resource type="Script" path="res://hitbox_component.gd" id="9_gmd1v"]
-[ext_resource type="PackedScene" path="res://hit_flash_component.tscn" id="10_xt5ej"]
-[ext_resource type="PackedScene" path="res://knockable_component.tscn" id="11_rwtmh"]
+[ext_resource type="PackedScene" uid="uid://r7beqteaan1l" path="res://hit_flash_component.tscn" id="10_xt5ej"]
+[ext_resource type="PackedScene" uid="uid://cxqa47rbftsf4" path="res://knockable_component.tscn" id="11_rwtmh"]
 [ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="12_h8uy1"]
 [ext_resource type="Script" path="res://particle_player.gd" id="14_ytqld"]
 [ext_resource type="Script" path="res://sound_player.gd" id="15_mv1vs"]
@@ -85,7 +85,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e7ngg"]
-size = Vector2(5, 14)
+size = Vector2(5, 5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j56pb"]
 size = Vector2(24, 4)
@@ -118,7 +118,7 @@ autoplay = "idle"
 frame_progress = 0.616457
 
 [node name="MovementCollisionBox" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1)
+position = Vector2(0, 5.5)
 shape = SubResource("RectangleShape2D_e7ngg")
 
 [node name="RotationPoint" type="Node2D" parent="."]

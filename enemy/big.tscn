@@ -21,7 +21,7 @@
 [ext_resource type="Script" path="res://sound_player.gd" id="19_fnfjy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
-size = Vector2(4, 10)
+size = Vector2(4, 4)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h34eh"]
 resource_local_to_scene = true
@@ -87,7 +87,7 @@ detection_range = 200.0
 attack = NodePath("ShockwaveAttack")
 
 [node name="MovementCollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1)
+position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_dim6m")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
