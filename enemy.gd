@@ -43,9 +43,18 @@ func _ready():
 	current_state = State.WANDERING
 	target_position = position
 	
-	var detection_shape = CircleShape2D.new()
-	detection_shape.radius = detection_range
-	$DetectionRange/CollisionShape2D.shape = detection_shape
+	if detection_range > 0:
+		var detection_area = Area2D.new()
+		var collision_shape = CollisionShape2D.new()
+		var shape = CircleShape2D.new()
+		shape.radius = detection_range
+		collision_shape.shape = shape
+		detection_area.body_entered.connect(_on_detection_range_body_entered)
+		detection_area.body_exited.connect(_on_detection_range_body_exited)
+		detection_area.set_collision_mask_value(1, true)
+		detection_area.add_child(collision_shape)
+		add_child(detection_area)
+		
 	$BounceComponent/Toggleable.disable()
 	
 	health_component.died.connect(func(): particle_player.play_particle(death_particles, global_position))
@@ -146,6 +155,7 @@ func _on_detection_range_body_entered(body):
 	if current_state == State.FOLLOWING:
 		return
 		
+	print(body.get_name())
 	if not body is Player:
 		return
 		
@@ -179,7 +189,8 @@ func _on_knockable_component_on_knocked_changed(is_knocked):
 		
 		$BounceComponent/Toggleable.enable()
 		$Sprite.frame = 1
-		attack.cancel()
+		if attack != null:
+			attack.cancel()
 	else:
 		$KnockbackComponent.set_collision_layer_value(1, false)
 		$KnockbackComponent.set_collision_layer_value(4, true)

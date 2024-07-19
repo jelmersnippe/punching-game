@@ -11,7 +11,7 @@ var can_attack: bool = false
 var attacking: bool = false
 
 func _ready():
-	var timer = get_tree().create_timer(cooldown)
+	var timer = get_tree().create_timer(3)
 	timer.timeout.connect(_finish_cooldown)
 
 func execute(_target: Node2D):

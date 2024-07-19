@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxtswnrtxc2s5"]
+[gd_scene load_steps=9 format=3 uid="uid://dxtswnrtxc2s5"]
 
 [ext_resource type="PackedScene" uid="uid://dpukfjaytn7gw" path="res://player_camera.tscn" id="1_1u303"]
 [ext_resource type="TileSet" uid="uid://b6n5fjkbmrfjh" path="res://arena.tres" id="2_w2vca"]
 [ext_resource type="PackedScene" uid="uid://desk13aq7n5bm" path="res://ui.tscn" id="3_6ocv4"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="4_y4yqw"]
 [ext_resource type="PackedScene" uid="uid://hbd7myjyq1it" path="res://enemy/ranged.tscn" id="5_2pd8k"]
+[ext_resource type="PackedScene" uid="uid://dxm6hpau7i1ik" path="res://enemy/big.tscn" id="5_64pyx"]
+[ext_resource type="PackedScene" uid="uid://d2w73s62i5iip" path="res://enemy/fodder.tscn" id="7_vbwrf"]
+[ext_resource type="PackedScene" uid="uid://bam16b5ketuyq" path="res://enemy/charger.tscn" id="8_6o2jq"]
 
 [node name="TestLevel" type="Node2D"]
 
@@ -22,13 +25,50 @@ layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608,
 [node name="Player" parent="." instance=ExtResource("4_y4yqw")]
 position = Vector2(565, 420)
 
-[node name="Enemy" parent="." instance=ExtResource("5_2pd8k")]
-position = Vector2(626, 522)
+[node name="Big" parent="." instance=ExtResource("5_64pyx")]
+position = Vector2(499, 529)
 
-[node name="Enemy2" parent="." instance=ExtResource("5_2pd8k")]
-position = Vector2(477, 515)
-speed = 0
+[node name="Big2" parent="." instance=ExtResource("5_64pyx")]
+position = Vector2(874, 618)
 
-[node name="Enemy3" parent="." instance=ExtResource("5_2pd8k")]
-position = Vector2(545, 576)
-speed = 0
+[node name="Big3" parent="." instance=ExtResource("5_64pyx")]
+position = Vector2(760, 198)
+
+[node name="Ranged" parent="." instance=ExtResource("5_2pd8k")]
+position = Vector2(696, 458)
+
+[node name="Fodder" parent="." instance=ExtResource("7_vbwrf")]
+position = Vector2(500, 450)
+
+[node name="Fodder2" parent="." instance=ExtResource("7_vbwrf")]
+position = Vector2(570, 572)
+
+[node name="Fodder3" parent="." instance=ExtResource("7_vbwrf")]
+position = Vector2(366, 412)
+
+[node name="Fodder4" parent="." instance=ExtResource("7_vbwrf")]
+position = Vector2(92, 684)
+
+[node name="Fodder5" parent="." instance=ExtResource("7_vbwrf")]
+position = Vector2(690, 688)
+
+[node name="Fodder6" parent="." instance=ExtResource("7_vbwrf")]
+position = Vector2(1132, 320)
+
+[node name="Charger" parent="." instance=ExtResource("8_6o2jq")]
+position = Vector2(233, 290)
+
+[node name="Charger2" parent="." instance=ExtResource("8_6o2jq")]
+position = Vector2(336, 650)
+
+[node name="Charger3" parent="." instance=ExtResource("8_6o2jq")]
+position = Vector2(485, 300)
+
+[node name="Ranged2" parent="." instance=ExtResource("5_2pd8k")]
+position = Vector2(337, 110)
+
+[node name="Ranged3" parent="." instance=ExtResource("5_2pd8k")]
+position = Vector2(449, 690)
+
+[node name="Ranged4" parent="." instance=ExtResource("5_2pd8k")]
+position = Vector2(616, 228)

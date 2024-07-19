@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bam16b5ketuyq"]
+[gd_scene load_steps=29 format=3 uid="uid://bam16b5ketuyq"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_co0jp"]
 [ext_resource type="AudioStream" uid="uid://b4vt2efwa80k7" path="res://sounds/hitHurt.wav" id="2_mirwg"]
@@ -44,8 +44,6 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_hc7r8"]
 
 [sub_resource type="Curve" id="Curve_p85g6"]
 max_value = 100.0
@@ -99,12 +97,6 @@ speed_scale = 0.0
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 collision_mask = 2
-
-[node name="DetectionRange" type="Area2D" parent="."]
-collision_layer = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRange"]
-shape = SubResource("CircleShape2D_hc7r8")
 
 [node name="HitParticles" type="CPUParticles2D" parent="."]
 emitting = false
@@ -255,8 +247,6 @@ script = ExtResource("18_s6b1h")
 [node name="SoundPlayer" type="Node" parent="."]
 script = ExtResource("19_p54ed")
 
-[connection signal="body_entered" from="DetectionRange" to="." method="_on_detection_range_body_entered"]
-[connection signal="body_exited" from="DetectionRange" to="." method="_on_detection_range_body_exited"]
 [connection signal="hit" from="HurtboxComponent" to="HitFlashComponent" method="flash"]
 [connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
 [connection signal="on_knocked_changed" from="KnockableComponent" to="." method="_on_knockable_component_on_knocked_changed"]
