@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdo7ulj4d4k66"]
+[gd_scene load_steps=8 format=3 uid="uid://bdo7ulj4d4k66"]
 
 [ext_resource type="TileSet" uid="uid://lriwx2xgfmv5" path="res://pool_table_tiles.tres" id="1_xjs88"]
 [ext_resource type="PackedScene" uid="uid://diye237awnyll" path="res://player.tscn" id="2_6kqix"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d2w73s62i5iip" path="res://enemy/fodder.tscn" id="4_pyd5n"]
 [ext_resource type="PackedScene" uid="uid://bam16b5ketuyq" path="res://enemy/charger.tscn" id="5_csyaa"]
 [ext_resource type="PackedScene" uid="uid://hbd7myjyq1it" path="res://enemy/ranged.tscn" id="6_ju1yx"]
+[ext_resource type="PackedScene" uid="uid://dxm6hpau7i1ik" path="res://enemy/big.tscn" id="7_2u4li"]
 
 [node name="TileMapTest" type="Node2D"]
 
@@ -28,3 +29,6 @@ position = Vector2(243, 172)
 
 [node name="Ranged" parent="." instance=ExtResource("6_ju1yx")]
 position = Vector2(98, 316)
+
+[node name="Big" parent="." instance=ExtResource("7_2u4li")]
+position = Vector2(211, 310)

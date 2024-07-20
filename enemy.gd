@@ -71,7 +71,6 @@ func _die():
 	
 	$Sprite.animation_finished.connect(queue_free)
 	
-		
 func _hit(direction: Vector2):
 	particle_player.play_particle(hit_particles, global_position, -direction)
 	sound_player.play_sound(hit_sound, 0)
@@ -176,7 +175,6 @@ func _on_detection_range_body_entered(body):
 	if current_state == State.FOLLOWING:
 		return
 		
-	print(body.get_name())
 	if not body is Player:
 		return
 		

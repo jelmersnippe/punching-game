@@ -19,7 +19,7 @@
 [ext_resource type="Script" path="res://sound_player.gd" id="19_y4hif"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dim6m"]
-size = Vector2(4, 4)
+size = Vector2(3, 9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h34eh"]
 resource_local_to_scene = true
@@ -197,10 +197,10 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.99361, 0.34586), 0.0, 0.0, 0, 
 point_count = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pdin5"]
-size = Vector2(5, 10)
+size = Vector2(5, 5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hk3ai"]
-size = Vector2(12, 18)
+size = Vector2(11, 15)
 
 [node name="Fodder" type="CharacterBody2D" node_paths=PackedStringArray("health_component", "hurtbox_component", "velocity_component", "knockable_component", "particle_player", "sound_player")]
 collision_layer = 8
@@ -222,13 +222,14 @@ wander_idle_time_min = 2.5
 wander_idle_time_max = 5.0
 
 [node name="MovementCollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2(0, 4)
+position = Vector2(0.5, 1.5)
 shape = SubResource("RectangleShape2D_dim6m")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_h34eh")
 sprite_frames = SubResource("SpriteFrames_av43m")
-animation = &"Death"
+animation = &"Idle"
+autoplay = "Idle"
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 collision_mask = 2
@@ -279,10 +280,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -49.5
-offset_top = -11.5
-offset_right = 49.5
-offset_bottom = 11.5
+offset_left = -49.0
+offset_top = -2.0
+offset_right = 50.0
+offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 6
@@ -295,7 +296,7 @@ collision_layer = 8
 script = ExtResource("6_155jg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
-position = Vector2(0.5, 1)
+position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_pdin5")
 
 [node name="KnockbackComponent" type="Area2D" parent="."]
@@ -303,7 +304,7 @@ collision_layer = 8
 script = ExtResource("7_46jtp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockbackComponent"]
-position = Vector2(0.5, 1)
+position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_pdin5")
 
 [node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
@@ -312,7 +313,7 @@ script = ExtResource("8_bwygw")
 health_component = NodePath("../HealthComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
-position = Vector2(0, 1)
+position = Vector2(0.5, 1.5)
 shape = SubResource("RectangleShape2D_hk3ai")
 
 [node name="HealthComponent" type="Node" parent="."]
@@ -326,7 +327,7 @@ velocity_component = NodePath("../VelocityComponent")
 mass = 1.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
-position = Vector2(0, 1)
+position = Vector2(0.5, 1.5)
 shape = SubResource("RectangleShape2D_hk3ai")
 
 [node name="VelocityComponent" type="Node" parent="."]
@@ -338,9 +339,9 @@ sprite = NodePath("../Sprite")
 
 [node name="Healthbar" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("13_6kurd")]
 offset_left = -12.0
-offset_top = -16.0
+offset_top = -12.0
 offset_right = 13.0
-offset_bottom = -11.0
+offset_bottom = -7.0
 health_component = NodePath("../HealthComponent")
 
 [node name="BounceComponent" type="Node2D" parent="." node_paths=PackedStringArray("velocity_component", "movement_component")]
