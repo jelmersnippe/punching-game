@@ -39,17 +39,18 @@ func execute(target: Node2D):
 	can_attack = false
 	charge_timer = get_tree().create_timer(charge_time)
 	charge_timer.timeout.connect(_shockwave)
-	_flash()
+	_flash(0.4)
 	
-func _flash():
+func _flash(time: float):
 	if not attacking:
 		return
 		
 	flash_component.flash()
 	
-	if charge_timer.time_left > flash_component.flash_time * 3:
-		flash_timer = get_tree().create_timer(flash_component.flash_time * 2)
-		flash_timer.timeout.connect(_flash)
+	var next_flash_time = (time * 0.8)
+	if charge_timer.time_left > (flash_component.flash_time * 2) + next_flash_time:
+		flash_timer = get_tree().create_timer(flash_component.flash_time + next_flash_time)
+		flash_timer.timeout.connect(func(): _flash(next_flash_time))
 	
 func _shockwave():
 	if not attacking:
