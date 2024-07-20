@@ -133,7 +133,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_i7olu")
 }],
-"loop": true,
+"loop": false,
 "name": &"Death",
 "speed": 5.0
 }, {
@@ -228,8 +228,7 @@ shape = SubResource("RectangleShape2D_dim6m")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_h34eh")
 sprite_frames = SubResource("SpriteFrames_av43m")
-animation = &"Idle"
-frame_progress = 0.912715
+animation = &"Death"
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 collision_mask = 2

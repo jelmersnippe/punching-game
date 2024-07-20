@@ -31,7 +31,8 @@ enum State {
 	WANDERING,
 	FOLLOWING,
 	SEEKING,
-	ATTACKING
+	ATTACKING,
+	DEAD
 }
 
 @export var wander_idle_time_min: float = 1
@@ -63,9 +64,13 @@ func _ready():
 	if attack != null:
 		attack.attack_completed.connect(func(): current_state = State.FOLLOWING)
 		
-func _die(direction: Vector2):
+func _die():
+	current_state = State.DEAD
 	particle_player.play_particle(death_particles, global_position)
 	$Sprite.play("Death")
+	
+	$Sprite.animation_finished.connect(queue_free)
+	
 		
 func _hit(direction: Vector2):
 	particle_player.play_particle(hit_particles, global_position, -direction)
@@ -92,6 +97,8 @@ func _process(delta):
 			_seeking_behavior()
 			$Sprite.play("Move")
 		State.ATTACKING:
+			return
+		State.DEAD:
 			return
 		
 	if velocity_component.velocity.x > 0:
@@ -186,11 +193,10 @@ func _on_detection_range_body_exited(body):
 	target = null
 	current_state = State.SEEKING
 
-func _on_health_component_died():
-	queue_free()
-
 var prev_animation
 func _on_knockable_component_on_knocked_changed(is_knocked):
+	if current_state == State.DEAD:
+		return
 	if is_knocked:
 		$KnockbackComponent.set_collision_layer_value(1, true)
 		$KnockbackComponent.set_collision_layer_value(4, false)
