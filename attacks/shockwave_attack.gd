@@ -2,6 +2,8 @@ extends Attack
 
 @export var flash_component: HitFlashComponent
 
+@export var stomp_sound: AudioStream
+
 @export var charge_time: float = 2
 @export var radius: float = 50
 @export var knockback_force: int = 100
@@ -50,6 +52,7 @@ func _flash():
 		flash_timer.timeout.connect(_flash)
 	
 func _shockwave():
+	$SoundPlayer.play_sound(stomp_sound, 0)
 	$ShockwaveParticles.emitting = true
 	set_collision_disabled(false)
 	var timer = get_tree().create_timer(duration)

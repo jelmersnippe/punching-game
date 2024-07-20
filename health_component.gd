@@ -20,8 +20,10 @@ func _ready() -> void:
 	current_health = max_health
 	
 func take_damage(damage: int) -> void:
+	if current_health <= 0:
+		return
+		
 	current_health = clamp(current_health - damage, 0, starting_health)
-	
 	
 	if current_health <= 0:
 		died.emit()

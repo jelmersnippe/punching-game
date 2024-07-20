@@ -52,6 +52,7 @@ func _ready():
 		collision_shape.shape = shape
 		detection_area.body_entered.connect(_on_detection_range_body_entered)
 		detection_area.body_exited.connect(_on_detection_range_body_exited)
+		detection_area.set_collision_layer_value(1, false)
 		detection_area.set_collision_mask_value(1, true)
 		detection_area.add_child(collision_shape)
 		add_child(detection_area)
@@ -65,6 +66,8 @@ func _ready():
 		attack.attack_completed.connect(func(): current_state = State.FOLLOWING)
 		
 func _die():
+	if current_state == State.DEAD:
+		return
 	current_state = State.DEAD
 	particle_player.play_particle(death_particles, global_position)
 	$Sprite.play("Death")

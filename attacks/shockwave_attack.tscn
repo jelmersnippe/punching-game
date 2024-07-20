@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://d2j45frcuhmki"]
+[gd_scene load_steps=8 format=3 uid="uid://d2j45frcuhmki"]
 
 [ext_resource type="Script" path="res://attacks/shockwave_attack.gd" id="1_b6stl"]
 [ext_resource type="Script" path="res://hitbox_component.gd" id="2_p1vqb"]
+[ext_resource type="AudioStream" uid="uid://b83xhww8nljml" path="res://sounds/mixkit-quest-game-heavy-stomp-v-3049.wav" id="2_p51aj"]
 [ext_resource type="Script" path="res://knockback_component.gd" id="3_de5l4"]
+[ext_resource type="Script" path="res://sound_player.gd" id="4_p3vsy"]
 
 [sub_resource type="Curve" id="Curve_7ah0p"]
 max_value = 100.0
@@ -15,6 +17,7 @@ point_count = 4
 
 [node name="ShockwaveAttack" type="Node2D"]
 script = ExtResource("1_b6stl")
+stomp_sound = ExtResource("2_p51aj")
 
 [node name="HitboxComponent" type="Area2D" parent="."]
 collision_layer = 8
@@ -45,3 +48,6 @@ damping_curve = SubResource("Curve_7ah0p")
 scale_amount_min = 2.0
 scale_amount_max = 5.0
 scale_amount_curve = SubResource("Curve_ed3bc")
+
+[node name="SoundPlayer" type="Node" parent="."]
+script = ExtResource("4_p3vsy")
