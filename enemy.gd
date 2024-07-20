@@ -45,6 +45,7 @@ var target: Node2D = null
 func _ready():
 	current_state = State.WANDERING
 	target_position = position
+	$NavigationAgent2D.target_position = position
 	
 	if detection_range > 0:
 		var detection_area = Area2D.new()
@@ -122,25 +123,26 @@ func _wander_behavior(delta):
 		current_state = State.FOLLOWING
 		return
 		
-	if position.distance_to(target_position) < 2:
-		velocity_component.velocity = Vector2.ZERO
-		var timer = get_tree().create_timer(randf_range(wander_idle_time_min, wander_idle_time_max))
-		timer.timeout.connect(_set_wander_position)
-		current_state = State.IDLE
+	if position.distance_to(target_position) < 2 or not $NavigationAgent2D.is_target_reachable():
+		if target_position == $NavigationAgent2D.get_final_position() or not $NavigationAgent2D.is_target_reachable():
+			velocity_component.velocity = Vector2.ZERO
+			var timer = get_tree().create_timer(randf_range(wander_idle_time_min, wander_idle_time_max))
+			timer.timeout.connect(_set_wander_position)
+			current_state = State.IDLE
+			return
+			
+		target_position = $NavigationAgent2D.get_next_path_position()
 		return
 		
 	var direction = position.direction_to(target_position)
 		
 	velocity_component.velocity = direction * speed
 	
-	$RayCast2D.target_position = velocity_component.velocity * delta * 10
-	if $RayCast2D.is_colliding():
-		target_position = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
-	
 func _set_wander_position():
 	if current_state != State.IDLE:
 		return
-	target_position = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
+	$NavigationAgent2D.target_position = position + Vector2(randf_range(-wander_range.x, wander_range.x), randf_range(-wander_range.y, wander_range.y))
+	target_position = $NavigationAgent2D.get_next_path_position()
 	current_state = State.WANDERING
 	
 func _seeking_behavior():

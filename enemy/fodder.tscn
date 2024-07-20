@@ -363,6 +363,14 @@ script = ExtResource("18_t1tmq")
 [node name="SoundPlayer" type="Node" parent="."]
 script = ExtResource("19_y4hif")
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 40.0
+neighbor_distance = 40.0
+max_neighbors = 1
+avoidance_layers = 8
+avoidance_mask = 8
+
 [connection signal="hit" from="HurtboxComponent" to="HitFlashComponent" method="flash"]
 [connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
 [connection signal="on_knocked_changed" from="KnockableComponent" to="." method="_on_knockable_component_on_knocked_changed"]

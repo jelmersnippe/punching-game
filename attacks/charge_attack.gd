@@ -42,7 +42,7 @@ func _flash(time: float):
 		flash_timer.timeout.connect(func(): _flash(next_flash_time))
 	
 func _charge(target: Node2D):
-	if not attacking:
+	if not attacking or target == null:
 		return
 		
 	var direction = global_position.direction_to(target.global_position)

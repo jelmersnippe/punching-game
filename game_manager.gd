@@ -27,6 +27,8 @@ func _ready():
 	bottom_right_tile = Vector2(x_positions.max(), y_positions.max())
 
 func _spawn_enemies():
+	if remaining_enemies > 0:
+		return
 	var enemy_spawns: Array[Vector2i] = []
 	
 	var tiles = tile_map.get_used_cells(0)
@@ -40,15 +42,15 @@ func _spawn_enemies():
 		
 	for pos in enemy_spawns:
 		var rng = randi_range(0, 100)
-		var new: Enemy
-		if rng < 40:
-			new = charger_scene.instantiate() as Enemy
-		elif rng < 60:
-			new = ranged_scene.instantiate() as Enemy
-		elif rng < 90:
-			new = fodder_scene.instantiate() as Enemy
-		else:
-			new = big_scene.instantiate() as Enemy
+		var new: Enemy = fodder_scene.instantiate() as Enemy
+		#if rng < 40:
+			#new = charger_scene.instantiate() as Enemy
+		#elif rng < 60:
+			#new = ranged_scene.instantiate() as Enemy
+		#elif rng < 90:
+			#new = fodder_scene.instantiate() as Enemy
+		#else:
+			#new = big_scene.instantiate() as Enemy
 			
 		new.position = pos * $TileMap.rendering_quadrant_size
 		new.health_component.died.connect(_reduce_remaining_enemies)
@@ -60,6 +62,7 @@ func _spawn_enemies():
 func _on_ui_start_game_requested():
 	for child in spawn_container.get_children():
 		child.queue_free()
+	remaining_enemies = 0
 		
 	var player = player_scene.instantiate()
 	player.position = center_tile * tile_map.rendering_quadrant_size
