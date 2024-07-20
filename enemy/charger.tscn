@@ -287,6 +287,7 @@ vertical_alignment = 1
 [node name="HitboxComponent" type="Area2D" parent="."]
 collision_layer = 8
 script = ExtResource("6_36k1e")
+contact_damage = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 position = Vector2(0, -2)
@@ -311,11 +312,13 @@ shape = SubResource("RectangleShape2D_hk3ai")
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("9_uqrl4")
+starting_health = 15
 
 [node name="KnockableComponent" type="Area2D" parent="." node_paths=PackedStringArray("velocity_component")]
 collision_layer = 8
 script = ExtResource("10_dqoul")
 velocity_component = NodePath("../VelocityComponent")
+mass = 1.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
 position = Vector2(-0.5, -3.5)

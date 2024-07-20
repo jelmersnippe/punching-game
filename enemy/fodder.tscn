@@ -216,7 +216,7 @@ particle_player = NodePath("ParticlePlayer")
 sound_player = NodePath("SoundPlayer")
 hit_sound = ExtResource("2_715iw")
 speed = 30
-wander_range = Vector2(40, 40)
+wander_range = Vector2(100, 100)
 detection_range = 0.0
 wander_idle_time_min = 2.5
 wander_idle_time_max = 5.0
@@ -318,13 +318,12 @@ shape = SubResource("RectangleShape2D_hk3ai")
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("9_s8he7")
-starting_health = 30
 
 [node name="KnockableComponent" type="Area2D" parent="." node_paths=PackedStringArray("velocity_component")]
 collision_layer = 8
 script = ExtResource("10_ssp2j")
 velocity_component = NodePath("../VelocityComponent")
-mass = 1.5
+mass = 0.7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KnockableComponent"]
 position = Vector2(0.5, 1.5)

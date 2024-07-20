@@ -157,9 +157,13 @@ func _release_charge():
 	
 func _ready():
 	default_cue_position = $RotationPoint/Cue.position
-	health_component.died.connect(func(): particle_player.play_particle(death_particles, global_position))
+	health_component.died.connect(_die)
 	hurtbox_component.hit_from.connect(func(direction): particle_player.play_particle(death_particles, global_position, -direction))
 	hurtbox_component.hit_from.connect(func(direction): sound_player.play_sound(hit_sound, 0))
+	
+func _die():
+	particle_player.play_particle(death_particles, global_position)
+	queue_free()
 	
 func _cancel_charge():
 	remaining_charge_cooldown = charge_cooldown

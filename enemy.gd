@@ -23,6 +23,8 @@ class_name Enemy
 
 var current_state: State = State.WANDERING:
 	set(value):
+		if current_state == State.DEAD:
+			return
 		current_state = value
 		$Label.text = State.keys()[value]
 		
@@ -68,9 +70,12 @@ func _ready():
 func _die():
 	if current_state == State.DEAD:
 		return
+		
 	current_state = State.DEAD
 	particle_player.play_particle(death_particles, global_position)
 	$Sprite.play("Death")
+	if attack != null:
+		attack.cancel()
 	
 	$Sprite.animation_finished.connect(queue_free)
 	

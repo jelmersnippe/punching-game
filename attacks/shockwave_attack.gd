@@ -52,6 +52,9 @@ func _flash():
 		flash_timer.timeout.connect(_flash)
 	
 func _shockwave():
+	if not attacking:
+		return
+		
 	$SoundPlayer.play_sound(stomp_sound, 0)
 	$ShockwaveParticles.emitting = true
 	set_collision_disabled(false)

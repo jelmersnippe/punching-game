@@ -12,13 +12,19 @@ var fodder_scene = preload("res://enemy/fodder.tscn")
 @export var spawn_container: Node
 @export var enemy_spawn_count: int = 10
 
+var remaining_enemies = 0
+
 var center_tile: Vector2
+var top_left_tile: Vector2
+var bottom_right_tile: Vector2
 
 func _ready():
 	var tiles = tile_map.get_used_cells(0)
 	var x_positions = tiles.map(func(x): return x.x)
 	var y_positions = tiles.map(func(x): return x.y)
 	center_tile = Vector2(round(x_positions.max() / 2), round(y_positions.max() / 2))
+	top_left_tile = Vector2(x_positions.min(), y_positions.min())
+	bottom_right_tile = Vector2(x_positions.max(), y_positions.max())
 
 func _spawn_enemies():
 	var enemy_spawns: Array[Vector2i] = []
@@ -27,7 +33,7 @@ func _spawn_enemies():
 	
 	while len(enemy_spawns) < enemy_spawn_count:
 		var pos = tiles.pick_random()
-		if pos in enemy_spawns or Vector2(pos).distance_to(center_tile) < 5:
+		if pos in enemy_spawns or Vector2(pos).distance_to(center_tile) < 5 or pos.x == top_left_tile.x or pos.x == bottom_right_tile.x or pos.y == top_left_tile.y or pos.y == bottom_right_tile.y:
 			continue
 		
 		enemy_spawns.append(pos)
@@ -45,7 +51,11 @@ func _spawn_enemies():
 			new = big_scene.instantiate() as Enemy
 			
 		new.position = pos * $TileMap.rendering_quadrant_size
+		new.health_component.died.connect(_reduce_remaining_enemies)
 		spawn_container.add_child.call_deferred(new)
+		remaining_enemies += 1
+		
+	print("spawn: " + str(remaining_enemies))
 	
 func _on_ui_start_game_requested():
 	for child in spawn_container.get_children():
@@ -58,3 +68,10 @@ func _on_ui_start_game_requested():
 	player_spawned.emit(player)
 	
 	_spawn_enemies()
+	
+func _reduce_remaining_enemies():
+	remaining_enemies -= 1
+	print("reduce: " + str(remaining_enemies))
+	
+	if remaining_enemies <= 0:
+		_spawn_enemies()

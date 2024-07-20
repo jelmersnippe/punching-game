@@ -41,5 +41,8 @@ func _flash():
 		flash_timer.timeout.connect(_flash)
 	
 func _charge(target: Node2D):
+	if not attacking:
+		return
+		
 	var direction = global_position.direction_to(target.global_position)
 	velocity_component.velocity = direction * speed
