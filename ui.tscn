@@ -70,4 +70,18 @@ text = "5 / 10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="WaveLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -28.0
+offset_top = 43.0
+offset_right = 28.0
+offset_bottom = 66.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+text = "Wave 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

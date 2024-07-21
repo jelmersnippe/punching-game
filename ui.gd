@@ -8,6 +8,9 @@ func _ready():
 	$StartButton.show()
 	$GameOverLabel.hide()
 	
+func set_wave(wave: int):
+	$WaveLabel.text = "Wave " + str(wave)
+	
 func screen_flash(intensity: float, time: float):
 	var shader_material = $ScreenFlash.material as ShaderMaterial
 	shader_material.set_shader_parameter("intensity", intensity)

@@ -25,6 +25,7 @@ var charge_sound_player: AudioStreamPlayer2D
 @export var TIME_TO_MAX_CHARGE = 1
 @export var MAX_CHARGE = 600
 @export var PUNCH_TIME = 0.2
+@export var POST_PUNCH_INVULNERABLE_TIME = 0.5
 
 var CHARGE_SPEED: int = MAX_CHARGE / TIME_TO_MAX_CHARGE
 
@@ -45,8 +46,9 @@ func _reset_hands():
 	$RotationPoint/Cue/CollisionShape2D.set_deferred("disabled", true)
 	$RotationPoint/KnockbackComponent/CollisionShape2D.set_deferred("disabled", true)
 	
-	$HurtboxComponent/CollisionShape2D.set_deferred("disabled", false)
-	$KnockableComponent/CollisionShape2D.set_deferred("disabled", false)
+	var timer = get_tree().create_timer(POST_PUNCH_INVULNERABLE_TIME)
+	timer.timeout.connect(func(): $HurtboxComponent/CollisionShape2D.set_deferred("disabled", false))
+	timer.timeout.connect(func(): $KnockableComponent/CollisionShape2D.set_deferred("disabled", false))
 	
 	$RotationPoint/Cue.position = default_cue_position
 
