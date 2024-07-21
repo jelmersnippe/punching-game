@@ -7,6 +7,8 @@ func _ready():
 	_disabled_screenflash()
 	$StartButton.show()
 	$GameOverLabel.hide()
+	$Healthbar.hide()
+	$WaveLabel.hide()
 	
 func set_wave(wave: int):
 	$WaveLabel.text = "Wave " + str(wave)
@@ -32,10 +34,13 @@ func _on_main_player_spawned(player: Player):
 	
 func _on_start_button_pressed():
 	start_game_requested.emit()
+	$WaveLabel.show()
 	$StartButton.hide()
 	$GameOverLabel.hide()
+	$Healthbar.show()
 
 func show_game_over():
 	$GameOverLabel.show()
 	$StartButton.text = "Restart"
 	$StartButton.show()
+	$Healthbar.hide()

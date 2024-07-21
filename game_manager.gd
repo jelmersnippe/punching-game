@@ -67,7 +67,6 @@ func _spawn_enemies():
 	
 var player: Player
 func _on_ui_start_game_requested():
-	wave_index = 0
 	for child in spawn_container.get_children():
 		child.queue_free()
 	remaining_enemies = 0
@@ -79,6 +78,7 @@ func _on_ui_start_game_requested():
 	player_spawned.emit(player)
 	
 	wave_changed.connect(func(x): player.health_component.take_damage(-player.health_component.max_health))
+	wave_index = 0
 	
 	_spawn_enemies()
 	
